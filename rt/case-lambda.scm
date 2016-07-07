@@ -18,7 +18,9 @@
 
 (define-syntax case-lambda
   (syntax-rules ()
-    ((case-lambda cls ...)
+    ((case-lambda (arg body)) ;; short cut
+     (lambda arg body))
+    ((case-lambda cls0 cls1 ...)
      (lambda args
        (let ((len (length args)))
-        (%case-lambda0 (cls ...) args len cls ...))))))
+        (%case-lambda0 (cls0 cls1 ...) args len cls0 cls1 ...))))))

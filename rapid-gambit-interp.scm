@@ -1,4 +1,3 @@
-
 (define ($$undefined) (if #f #f))
 
 ;; Clobber libary import syntax
@@ -6,25 +5,9 @@
   (syntax-rules ()
     ((_ libs ...) (begin))))
 
-;; Generate source
-(define psrc (open-input-file "core.scm"))
-
-(define (gensrc port name)
-  (define l (read-line port))
-  (cond
-    ((char=? #\( (string-ref l 0))
-     (let ((inp (open-input-string l))
-           (outp (open-output-file name)))
-       (pp (read inp) outp)
-       (pp (read inp) outp)
-       (close-port outp)))
-    (else (gensrc port name))))
-
-(gensrc psrc "core0.scm")
-
 ;; Load primitive libraries
-(include "case-lambda.scm")
-(include "values-utils.scm")
+(include "rt/case-lambda.scm")
+(include "rt/values-utils.scm")
 (define-syntax unless
   (syntax-rules ()
     ((_ pred body)
@@ -56,7 +39,7 @@
     ((str port start) (display (substring str (string-length str)) port))
     ((str port start end) (display (substring str start end) port))))
 
-(include "record-GPL3.scm")
+(include "rt/record-GPL3.scm")
 
 ;; Load rapid-scheme core
-(load "core0.scm")
+(include "core0.scm")
