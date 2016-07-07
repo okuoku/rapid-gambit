@@ -1,3 +1,6 @@
+;; Modified for rapid-gambit. Now it uses vector-for-each2.
+
+
 ;;; Rapid Scheme --- An implementation of R7RS
 
 ;; Copyright (C) 2016 Marc Nieper-Wißkirchen

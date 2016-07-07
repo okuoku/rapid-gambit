@@ -1,4 +1,41 @@
+(define-macro (letrec*-values cls . body)
+  (define (%letrec*-values-collect-frms cls)
+    (define (itr cur cls)
+      (if (pair? cls)
+        (let* ((a (car cls))
+               (next (cdr cls))
+               (frm (car a)))
+          (cond
+            ((pair? frm)
+             (itr (append frm cur) next))
+            (else
+              (itr (cons frm cur) next))))
+        cur))
+    (itr '() cls))
+  (define (%letrec*-values-recv cl)
+    (let ((frm (car cl))
+          (body (cadr cl)))
+      (cond
+        ((list? frm)
+         (let ((xfrm (map gensym frm)))
+          `(call-with-values
+             (lambda () ,body)
+             (lambda ,xfrm 
+               ,@(map (lambda (f x) `(set! ,f ,x)) frm xfrm)))))
+        (else
+          (let ((xfrm (gensym frm)))
+           `(call-with-values
+              (lambda () ,body)
+              (lambda ,xfrm
+                (set! ,frm ,xfrm))))))))
+  (define frms (%letrec*-values-collect-frms cls))
+  `(let ()
+    ,@(map (lambda (x) `(define ,x "undefined-letrec*-values")) frms)
+    ,@(map %letrec*-values-recv cls)
+    (begin ,@body)))
 
+
+#|
 ;; FIXME: R7RS define-values would not work here.. (find out why.)
 
 (define-syntax %letrec*-values/emit*set!
@@ -79,3 +116,4 @@
      (let () . body))
     ((_ (cls ...) . body)
      (%letrec*-values/reqtemp () (cls ...) (cls ...) . body))))
+|#

@@ -1,17 +1,16 @@
+#!/usr/local/Gambit/bin/gsi.exe 
+
 (define ($$undefined) (if #f #f))
 
 ;; Clobber libary import syntax
-(define-syntax import
-  (syntax-rules ()
-    ((_ libs ...) (begin))))
+(define-macro (import . bogus) '(begin))
 
 ;; Load primitive libraries
 (include "rt/case-lambda.scm")
 (include "rt/values-utils.scm")
-(define-syntax unless
-  (syntax-rules ()
-    ((_ pred body)
-     (if (not pred) body))))
+
+(define-macro (unless test . body)
+  `(if ,test #f (begin ,@body)))
 
 (define member
   (case-lambda

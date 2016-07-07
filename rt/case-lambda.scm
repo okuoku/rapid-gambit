@@ -1,3 +1,4 @@
+#|
 ;; Took from R7RS, re-written in R5RS syntax-rules
 (define-syntax %case-lambda0
   (syntax-rules ()
@@ -24,3 +25,43 @@
      (lambda args
        (let ((len (length args)))
         (%case-lambda0 (cls0 cls1 ...) args len cls0 cls1 ...))))))
+|#
+
+
+(define-macro (case-lambda . cls*)
+  (define (dotted-length pr)
+    (define (itr acc p)
+      (if (pair? p)
+        (itr (+ 1 acc) (cdr p))
+        acc))
+    (itr 0 pr))
+  (define (%emit-case-lambda len args cls*)
+    (cond
+      ((pair? cls*)
+       (let ((a (car cls*))
+             (next (cdr cls*)))
+         (define (fail) (%emit-case-lambda len args next))
+         (let ((frm (car a))
+               (body* (cdr a)))
+           (cond
+             ((list? frm)
+              (let ((xlen (length frm)))
+               `(if (= ,len ,xlen)
+                  (apply (lambda ,frm ,@body*) ,args)
+                  ,(fail))))
+             ((pair? frm)
+              (let ((xlen (dotted-length frm)))
+               `(if (>= ,len ,xlen)
+                  (apply (lambda ,frm ,@body*) ,args)
+                  ,(fail))))
+             (else
+               `(apply (lambda ,frm ,@body*) ,args))))))
+      (else
+        '(error "no matching clause"))))
+  (if (= 1 (length cls*))
+    (append `(lambda ,(caar cls*)) (cdar cls*))
+    (let ((args (gensym))
+          (len (gensym)))
+      `(lambda ,args
+         (let ((,len (length ,args)))
+          ,(%emit-case-lambda len args cls*))))))
