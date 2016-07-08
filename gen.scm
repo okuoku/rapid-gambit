@@ -1,3 +1,5 @@
+#!/usr/local/Gambit/bin/gsi
+
 ;; Generate source from Larceny output
 (define psrc (open-input-file "core.scm"))
 

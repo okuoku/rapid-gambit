@@ -1,5 +1,6 @@
-;; Modified for rapid-gambit. Now it uses vector-for-each2.
-
+;; for rapid-gambit
+(define-macro (unless test . body)
+  `(if ,test #f (begin ,@body)))
 
 ;;; Rapid Scheme --- An implementation of R7RS
 
@@ -46,7 +47,7 @@
 	(unless (= (vector-length arg-vector) (vector-length indices))
 	  (error "unexpected number of arguments in record constructor" (vector-length args)))
 	(let ((fields (make-vector size (if #f #f))))
-	  (vector-for-each2 ;; CHANGE
+	  (vector-for-each
 	   (lambda (arg index)
 	     (vector-set! fields index arg))
 	   arg-vector indices)

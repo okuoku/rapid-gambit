@@ -1,0 +1,44 @@
+This directory includes R7RS procedures for Gambit.
+
+Libraries
+---------
+
+- (scheme base)
+
+  On Gambit, `raise` is actually R7RS `raise-continuable`.
+
+  * eof-object - not optimal
+  * member - Override
+  * string-copy - Override
+  * u8-ready? - Not implemented (never)
+  * flush-output-port - No-op
+
+- (scheme char)
+
+- (scheme eval)
+
+- (scheme file)
+
+- (scheme lazy)
+
+- (scheme process-context)
+
+- (scheme time)
+
+- (scheme write)
+
+
+
+NOT Included
+------------
+
+Since Gambit implements R5RS, we don't have to reimprement R5RS here.
+
+ - (scheme case-lambda) - syntax only
+ - (scheme complex)     - R5RS
+ - (scheme cxr)         - R5RS
+ - (scheme inexact)     - R5RS
+ - (scheme load)        - ???
+ - (scheme read)        - R5RS
+ - (scheme r5rs)        - R5RS
+
