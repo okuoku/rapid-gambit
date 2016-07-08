@@ -12,8 +12,6 @@
 (define-macro (unless test . body)
   `(if ,test #f (begin ,@body)))
 
-(define bk 0)
-
 (define %%my-eof-object
   (let ((p (open-input-string "")))
    (read p)))
@@ -22,11 +20,9 @@
 
 (define member
   (case-lambda
-    (() (break member) (member)) ;; HACK
+    (() (break member) (member)) ;; HACK(breakpoint)
     ((x lis) (member x lis equal?))
     ((x lis p) 
-     ;(set! bk (+ 1 bk))
-     ;(pp (list 'bk bk 'member: x lis p))
      (and (pair? lis)
           (or (and (p x (car lis))
                    lis)

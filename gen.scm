@@ -1,4 +1,4 @@
-;; Generate source
+;; Generate source from Larceny output
 (define psrc (open-input-file "core.scm"))
 
 (define (gensrc port name)
