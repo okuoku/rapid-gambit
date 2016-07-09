@@ -7,12 +7,23 @@ set(RAPID_GAMBIT_ROOT
     "${CMAKE_CURRENT_SOURCE_DIR}")
 set(RAPID_SCHEME_ROOT
     "${CMAKE_CURRENT_LIST_DIR}/../rapid-scheme")
-set(RAPID_GAMBIT_GSC
-    "/usr/local/Gambit/bin/gsc")
-set(RAPID_GAMBIT_GSI
-    "/usr/local/Gambit/bin/gsi")
-set(RAPID_GAMBIT_LARCENY
-    "/cygdrive/c/prog/larceny-0.99-bin-native-ia32-win32/larceny.bat")
+
+find_program(RAPID_GAMBIT_GSC
+    gsc
+    HINTS
+    /usr/local/Gambit/bin)
+
+find_program(RAPID_GAMBIT_GSI
+    gsi
+    HINTS
+    /usr/local/Gambit/bin)
+
+find_program(RAPID_GAMBIT_LARCENY
+    larceny
+    )
+
+# set(RAPID_GAMBIT_LARCENY
+#    "/cygdrive/c/prog/larceny-0.99-bin-native-ia32-win32/larceny.bat")
 
 if(WIN32 OR CYGWIN)
     set(exeext ".exe")
@@ -35,7 +46,9 @@ set(rapid-gambit-srcs
     rt/values-utils.scm
 
     # R7RS runtimes
+    r7/_override.scm
     r7/base.scm
+    r7/process-context.scm
     )
 
 set(rapid-gambit-bootstrap
@@ -107,3 +120,11 @@ add_custom_command(OUTPUT ${RAPID_GAMBIT}
 
 add_custom_target(rapid-gambit ALL
     DEPENDS ${RAPID_GAMBIT})
+
+
+message(STATUS "")
+message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")
+message(STATUS "gsi(RAPID_GAMBIT_GSI) = ${RAPID_GAMBIT_GSI}")
+message(STATUS "gsc(RAPID_GAMBIT_GSC) = ${RAPID_GAMBIT_GSC}")
+message(STATUS "larceny(RAPID_GAMBIT_LARCENY) = ${RAPID_GAMBIT_LARCENY}")
+
