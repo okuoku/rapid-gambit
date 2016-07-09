@@ -41,6 +41,9 @@ find_program(RAPID_GAMBIT_LARCENY
 set(RAPID_GAMBIT_ROOT # Obsolete (no longer optional)
     "${CMAKE_CURRENT_SOURCE_DIR}")
 
+set(RAPID_GAMBIT_LIBPATH
+    "${CMAKE_INSTALL_PREFIX}/share/rapid-gambit/lib")
+
 if(WIN32 OR CYGWIN)
     set(exeext ".exe")
 else()
@@ -73,6 +76,9 @@ set(rapid-gambit-srcs
     r7/eval.scm
     )
 
+set(rapid-gambit-lib-srcs
+    lib/rapid-gambit/buildconfig.sld)
+
 set(rapid-gambit-bootstrap
     ${CMAKE_CURRENT_SOURCE_DIR}/${rapid-gambit-bootstrap})
 set(rapid-gambit-main
@@ -86,6 +92,7 @@ macro(list_prefix var prefix)
 endmacro()
 
 list_prefix(rapid-gambit-srcs ${CMAKE_CURRENT_SOURCE_DIR}/)
+list_prefix(rapid-gambit-lib-srcs ${CMAKE_CURRENT_SOURCE_DIR}/)
 
 # Generate versionfile
 add_custom_target(genversion)
@@ -112,6 +119,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     DEPENDS 
     ${rapid-gambit-bootstrap}
     ${rapid-gambit-main}
+    ${rapid-gambit-lib-srcs}
     ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
     ${RAPID_SCHEME_VERSION}
     COMMENT "Generating R7RS core with Larceny(core.scm)"
@@ -172,6 +180,16 @@ add_custom_command(OUTPUT ${RAPID_GAMBIT}
 add_custom_target(rapid-gambit ALL
     DEPENDS ${RAPID_GAMBIT})
 add_dependencies(rapid-gambit genversion)
+
+# install targets
+install(PROGRAMS
+    ${RAPID_GAMBIT}
+    DESTINATION bin)
+install(DIRECTORY
+    ${RAPID_SCHEME_ROOT}/rapid
+    ${RAPID_SCHEME_ROOT}/share/rapid
+    ${RAPID_SCHEME_ROOT}/share/scheme
+    DESTINATION ${RAPID_GAMBIT_LIBPATH})
 
 message(STATUS "")
 message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")

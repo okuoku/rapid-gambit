@@ -30,7 +30,8 @@
 	(rapid version-etc)
 	(rapid syntax)
 	(rapid libraries)
-	(rapid compiler))
+	(rapid compiler)
+        (rapid-gambit buildconfig))
 
 (define (write-filtered x port)
   (define (xmap obj)
@@ -68,6 +69,12 @@
   (when (file-exists? fn)
     (delete-file fn))
   (open-output-file fn))
+
+;; Add default library paths
+(for-each (lambda (l)
+            (current-library-directories
+              (cons l (current-library-directories))))
+          (reverse (buildconfig-libpath)))
 
 (let-values
     (((input)

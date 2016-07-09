@@ -35,11 +35,15 @@ mkdir build
 chdir build
 
 # Generate Makefile
-cmake ../           # Path to this repository
+cmake -DCMAKE_INSTALL_PREFIX=/opt/rapid-gambit ../   # Path to this repository
 make
 
 # To run R7RS program,
 ./rapid-scheme -I /path/to/rapid-scheme -I /path/to/rapid-scheme/share prog.scm
+
+# Installation
+make install
+/opt/rapid-gambit/bin/rapid-gambit prog.scm
 ```
 
 CMakeLists.txt will accept following variables:
@@ -48,8 +52,6 @@ CMakeLists.txt will accept following variables:
 - `RAPID_GAMBIT_GSI`     - Path to Gambit's `gsi` executable
 - `RAPID_GAMBIT_GSC`     - Path to Gambit's `gsc` executable
 - `RAPID_GAMBIT_LARCENY` - Path to Larceny executable to bootstrap
-
-FIXME: Currently it has no `install` target.
 
 # License
 
