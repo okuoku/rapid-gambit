@@ -3,26 +3,21 @@
 ;; Clobber libary import syntax
 (define-macro (import . bogus) '(begin 'bogus))
 
+;; Load eval prologue
+;(include "@CMAKE_CURRENT_BINARY_DIR@/_prologue.scm")
+
 ;; Load primitive libraries
 (include "@RAPID_GAMBIT_ROOT@/rt/case-lambda.scm")
 (include "@RAPID_GAMBIT_ROOT@/rt/values-utils.scm")
+(include "@RAPID_GAMBIT_ROOT@/rt/record-GPL3.scm")
 
 ;; Load R7RS procedures
 (include "@RAPID_GAMBIT_ROOT@/r7/_override.scm")
 (include "@RAPID_GAMBIT_ROOT@/r7/base.scm")
 (include "@RAPID_GAMBIT_ROOT@/r7/process-context.scm")
-
-(define (environment . ignored) 'bogus)
-
-
-;; FIXME: foldcase
-(define (char-foldcase c) c)
-(define (string-foldcase str) str)
-
-;; Override write-shared
-(define write-shared pp)
-
-(include "@RAPID_GAMBIT_ROOT@/rt/record-GPL3.scm")
+(include "@RAPID_GAMBIT_ROOT@/r7/write.scm")
+(include "@RAPID_GAMBIT_ROOT@/r7/char.scm")
+(include "@RAPID_GAMBIT_ROOT@/r7/eval.scm")
 
 ;; Load rapid-scheme core
 (include "@CMAKE_CURRENT_BINARY_DIR@/core0.scm")

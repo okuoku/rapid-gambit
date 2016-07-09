@@ -54,9 +54,6 @@
     ((str start) (substring str start (string-length str)))
     ((str start end) (substring str start end))))
 
-(set! string-copy string-copy:r7)
-
-
 (define (string-for-each p str)
   (for-each p (string->list str)))
 

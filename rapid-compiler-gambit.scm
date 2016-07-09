@@ -22,6 +22,7 @@
 	(scheme process-context)
 	(scheme write)
         (scheme file)
+        (scheme eval)
 	(rapid and-let)
 	(rapid error)
 	(rapid format)
@@ -61,6 +62,7 @@
   (emit-bug-reporting-address))
 
 (define output-filename #f)
+(define eval-now! #f)
 
 (define (open-output-file/force fn)
   (when (file-exists? fn)
@@ -105,18 +107,25 @@
     (help)
     (exit 1))
 
+  (unless output-filename (set! eval-now! #t))
+
   (and-let*
       ((expanded-program (compile input)))
-    (let ((p (or (and output-filename 
-                      (open-output-file/force output-filename))
-                 (current-output-port))))
-      (for-each (lambda (sexp) 
-                  (write-filtered sexp p)
-                  (when output-filename
-                    (newline p)))
-                expanded-program)
-      (when output-filename
-        (flush-output-port p)
-        (close-port p)))
-    (unless output-filename (newline))))
+    (cond
+      (eval-now!
+        (eval (cadr expanded-program) 
+              (environment '(rapid primitive))))
+      (else
+        (let ((p (or (and output-filename 
+                          (open-output-file/force output-filename))
+                     (current-output-port))))
+          (for-each (lambda (sexp) 
+                      (write-filtered sexp p)
+                      (when output-filename
+                        (newline p)))
+                    expanded-program)
+          (when output-filename
+            (flush-output-port p)
+            (close-port p)))
+        (unless output-filename (newline))))))
 

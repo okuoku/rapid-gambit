@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(rapid-gambit NONE)
 
-
 # FIXME: Detect them
 set(RAPID_GAMBIT_ROOT
     "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -49,6 +48,9 @@ set(rapid-gambit-srcs
     r7/_override.scm
     r7/base.scm
     r7/process-context.scm
+    r7/write.scm
+    r7/char.scm
+    r7/eval.scm
     )
 
 set(rapid-gambit-bootstrap
@@ -121,10 +123,10 @@ add_custom_command(OUTPUT ${RAPID_GAMBIT}
 add_custom_target(rapid-gambit ALL
     DEPENDS ${RAPID_GAMBIT})
 
-
 message(STATUS "")
 message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")
 message(STATUS "gsi(RAPID_GAMBIT_GSI) = ${RAPID_GAMBIT_GSI}")
 message(STATUS "gsc(RAPID_GAMBIT_GSC) = ${RAPID_GAMBIT_GSC}")
 message(STATUS "larceny(RAPID_GAMBIT_LARCENY) = ${RAPID_GAMBIT_LARCENY}")
+message(STATUS "")
 
