@@ -94,7 +94,11 @@
 			    (exit)))
 		  (option '(#\v "version") #f #f
 			  (lambda (option name arg input)
-			    (version-etc "rapid-compiler")
+                            (display "Rapid-Gambit:\n")
+                            (display "rapid-gambit is based on rapid-scheme [")
+                            (display (buildconfig-version/rapid-scheme))
+                            (display "]\n")
+			    (version-etc "rapid-gambit")
 			    (exit)))
 		  (option '(#\I "include") #t #t
 			  (lambda (option name arg input)

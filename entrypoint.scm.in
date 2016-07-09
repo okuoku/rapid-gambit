@@ -3,6 +3,7 @@
 ;; Clobber libary import syntax
 (define-macro (import . bogus) '(begin 'bogus))
 
+(include "@CMAKE_CURRENT_BINARY_DIR@/VERSION-rapid-scheme.scm")
 (include "@CMAKE_CURRENT_BINARY_DIR@/config.scm")
 (include "@CMAKE_CURRENT_BINARY_DIR@/buildconfig.scm")
 

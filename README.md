@@ -4,8 +4,8 @@ Gambit port of [rapid-scheme](https://www.rapid-scheme.org/).
 
 # Status
 
-Now runs some R7RS code with Gambit interpreter; rapid-compiler compiled with 
-`gsc` successfully runs rapid-scheme frontend itself.
+Now it runs some R7RS code with Gambit interpreter; rapid-compiler compiled 
+with `gsc` successfully runs rapid-scheme frontend itself.
 
 Most of R7RS libraries are still missing.
 
@@ -32,7 +32,7 @@ git submodule update --init
 
 # Create build directory anywhere you want
 mkdir build
-chdir build
+cd build
 
 # Generate Makefile
 cmake -DCMAKE_INSTALL_PREFIX=/opt/rapid-gambit ../   # Path to this repository

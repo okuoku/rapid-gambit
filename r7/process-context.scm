@@ -16,14 +16,17 @@
          (itr (car cm) cm cm))
         %my-command-line)))
 
-(define (exit:r7 b)
-  (cond
-    ((boolean? b)
-     (if b 
-       (exit 1)
-       (exit 0)))
-    (else
-      (exit b))))
+(define exit:r7
+  (case-lambda
+    (() (exit:r7 #t))
+    ((b)
+     (cond
+       ((boolean? b)
+        (if b 
+          (exit 1)
+          (exit 0)))
+       (else
+         (exit b))))))
 
 (define (emergency-exit b) (exit:r7 b))
 
