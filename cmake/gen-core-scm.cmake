@@ -31,6 +31,7 @@ if(has_cygpath)
     message(STATUS "Paths are converted:")
     do_cygpath(RAPID_SCHEME ${RAPID_SCHEME})
     do_cygpath(ENTRYPOINT ${ENTRYPOINT})
+    do_cygpath(OUT ${OUT})
 endif()
 
 set(buildline
@@ -43,6 +44,7 @@ set(buildline
     --
     -I ${RAPID_SCHEME}
     -I ${RAPID_SCHEME}/share
+    -o ${OUT}
     ${ENTRYPOINT}
     )
 
@@ -52,7 +54,6 @@ foreach(e ${buildline})
 endforeach()
 
 execute_process(COMMAND ${buildline}
-    OUTPUT_FILE ${OUT}
     RESULT_VARIABLE rr)
 
 if(rr)
