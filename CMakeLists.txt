@@ -170,6 +170,7 @@ add_custom_command(OUTPUT ${compiled-frontend-c}
 add_custom_command(OUTPUT ${RAPID_GAMBIT}
     COMMAND ${RAPID_GAMBIT_GSC}
     -o ${RAPID_GAMBIT}
+    -cc-options "\"-D___SINGLE_HOST\" -O1"
     -exe
     ${compiled-frontend-c}
     DEPENDS
