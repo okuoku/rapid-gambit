@@ -2,16 +2,108 @@
 
 
 ;; Exceptions
+(define (with-exception-handler:r7 handler thunk)
+  (with-exception-catcher
+    handler
+    thunk))
 
-; FIXME: replacing Gambit's original raise is not good idea
-;        but we should do so in someday...
+(define (raise:r7 e)
+  (abort e))
 
-; Anyway, define raise continuable. On Gambit, `noncontinuable-exception?`
-; exception is only non-continuables. so just `raise` is mostly 
-; raise-continuable.
-(define raise-continuable raise)
+(define (raise-continuable e) ;; FIXME: not very correct
+  (define h (current-exception-handler))
+  (call-with-values
+    (lambda () (raise e))
+    (lambda x
+      (current-exception-handler h)
+      (values x))))
 
 ;; Errors
+
+(define-macro (%%def-exception-object-handlers)
+  (define (ent e)
+    (define (basesym e) (string->symbol
+                          (string-append
+                            (symbol->string e)
+                            "-exception?")))
+    (let ((type (car e))
+          (basename (cadr e))
+          (components (cddr e)))
+      (define (componentsym e)
+        (string->symbol
+          (string-append
+            (symbol->string basename)
+            "-exception-"
+            (symbol->string e))))
+      `(list ,(basesym basename)
+             ',type 
+             ,@(map (lambda (e) `(cons ',e ,(componentsym e))) components))))
+  (define excs
+    '((error noncontinuable reason)
+      (error heap-overflow)
+      (error stack-overflow)
+      (error os procedure arguments code message)
+      (file  no-such-file-or-directory procedure arguments)
+      (error unbound-os-environment-variable procedure arguments)
+      (error scheduler reason)
+      (error deadlock)
+      (error abandoned-mutex)
+      (error join-timeout procedure arguments)
+      (error started-thread procedure arguments)
+      (error terminated-thread procedure arguments)
+      (error uncaught procedure arguments reason)
+      (error cfun-conversion procedure arguments code message)
+      (error sfun-conversion procedure arguments code message)
+      (error multiple-c-return)
+      (read  datum-parsing kind parameters readenv)
+      (read  expression-parsing kind parameters source)
+      (error unbound-global variable code rte)
+      (error type procedure arguments arg-num type-id)
+      (error range procedure arguments arg-num)
+      (error divide-by-zero procedure arguments)
+      (error improper-length-list procedure arguments arg-num)
+      (error wrong-number-of-arguments procedure arguments)
+      (error number-of-arguments-limit procedure arguments)
+      (error nonprocedure-operator operator arguments code rte)
+      (error unknown-keyword-argument procedure arguments)
+      (error keyword-expected procedure arguments)
+      (error error message parameters)))
+
+  `(define %%exception-object-handlers
+     (list ,@(map ent excs))))
+
+(%%def-exception-object-handlers)
+
+(define (%%error-object-dispatch proc e)
+  (define (itr cur)
+    (and (pair? cur)
+         (let ((check (caar cur)))
+          (if (check e)
+            (apply proc cur)
+            (itr (cdr cur))))))
+  (itr %%exception-object-handlers)
+  #f)
+
+(define (error-object? e)
+  (%%error-object-dispatch (lambda _ #t) e))
+
+(define (error-object-irritants e)
+  (cond
+    ((error-exception? e)
+     (error-exception-parameters e))
+    (else #f)))
+
+(define (error-object-message e)
+  (cond
+    ((error-exception? e)
+     (error-exception-message e))
+    (else #f)))
+
+(define (file-error? e)
+  (%%error-object-dispatch (lambda (type . _) (eq? type 'file)) e))
+
+(define (read-error? e)
+  (%%error-object-dispatch (lambda (type . _) (eq? type 'read)) e))
 
 ;; Predicates
 (define (%%for-all a . d)
@@ -122,11 +214,6 @@
    textual-port?
 
    ;; R7RS Errors
-   error-object-irritants
-   error-object-message 
-   error-object?
-   file-error?
-   read-error? 
 
 
    ;; R7RS Math
