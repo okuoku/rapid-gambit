@@ -23,6 +23,9 @@ Libraries
 
 - (scheme process-context)
 
+  * command-line - Uses "--" to separate backend options.
+  * get-environment-variables - not implemented
+
 - (scheme time)
 
 - (scheme write)

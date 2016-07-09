@@ -1,7 +1,7 @@
 #!@RAPID_GAMBIT_GSI@
 
 ;; Clobber libary import syntax
-(define-macro (import . bogus) '(begin))
+(define-macro (import . bogus) '(begin 'bogus))
 
 ;; Load primitive libraries
 (include "@RAPID_GAMBIT_ROOT@/rt/case-lambda.scm")
@@ -9,6 +9,7 @@
 
 ;; Load R7RS procedures
 (include "@RAPID_GAMBIT_ROOT@/r7/base.scm")
+(include "@RAPID_GAMBIT_ROOT@/r7/process-context.scm")
 
 (define (environment . ignored) 'bogus)
 

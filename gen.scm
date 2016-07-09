@@ -7,7 +7,7 @@
   (define l (read-all port))
   (let ((outp (open-output-file name)))
    (for-each (lambda (sexp)
-               (pp sexp outp)
+               (pp (list 'with-r7-override sexp) outp)
                (newline outp))
              l)
    (close-port outp)))
