@@ -1,0 +1,3 @@
+[submodule "rapid-scheme"]
+	path = rapid-scheme
+	url = https://gitlab.com/nieper/rapid-scheme.git
