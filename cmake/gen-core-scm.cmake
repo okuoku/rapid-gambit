@@ -4,7 +4,9 @@
 # INPUT:
 #  LARCENY: path to larceny executable
 #  RAPID_SCHEME: full path to rapid-scheme repository root
-#  ENTRYPOINT: full path to main program
+#  RAPID_GAMBIT: full path to rapid-gambit repository root
+#  ENTRYPOINT: full path to bootstrap program
+#  MAIN: full path to main program
 #  OUT: full path to output(core.scm)
 #
 
@@ -31,6 +33,7 @@ if(has_cygpath)
     message(STATUS "Paths are converted:")
     do_cygpath(RAPID_SCHEME ${RAPID_SCHEME})
     do_cygpath(ENTRYPOINT ${ENTRYPOINT})
+    do_cygpath(MAIN ${MAIN})
     do_cygpath(OUT ${OUT})
 endif()
 
@@ -44,8 +47,9 @@ set(buildline
     --
     -I ${RAPID_SCHEME}
     -I ${RAPID_SCHEME}/share
+    -I ${RAPID_GAMBIT}/lib
     -o ${OUT}
-    ${ENTRYPOINT}
+    ${MAIN}
     )
 
 message(STATUS "Running:")

@@ -53,7 +53,10 @@ set(RAPID_GAMBIT "${CMAKE_CURRENT_BINARY_DIR}/rapid-gambit${exeext}")
 set(RAPID_SCHEME_VERSION "${CMAKE_CURRENT_BINARY_DIR}/VERSION-rapid-scheme.scm")
 
 set(rapid-gambit-bootstrap
-    rapid-compiler-gambit.scm)
+    rapid-compiler-bootstrap.scm)
+
+set(rapid-gambit-main
+    rapid-gambit-main.scm)
 
 set(rapid-gambit-srcs
     # Rapid-scheme runtimes
@@ -71,15 +74,20 @@ set(rapid-gambit-srcs
     )
 
 set(rapid-gambit-bootstrap
-    ${CMAKE_CURRENT_LIST_DIR}/${rapid-gambit-bootstrap})
+    ${CMAKE_CURRENT_SOURCE_DIR}/${rapid-gambit-bootstrap})
+set(rapid-gambit-main
+    ${CMAKE_CURRENT_SOURCE_DIR}/${rapid-gambit-main})
 
-set(_templist)
-foreach(e ${rapid-gambit-srcs})
-    list(APPEND _templist ${CMAKE_CURRENT_LIST_DIR}/${e})
-endforeach()
+macro(list_prefix var prefix)
+    set(_templist)
+    foreach(e ${${var}})
+        list(APPEND _templist ${prefix}${e})
+    endforeach()
+endmacro()
 
-set(rapid-gambit-srcs ${_templist})
+list_prefix(rapid-gambit-srcs ${CMAKE_CURRENT_SOURCE_DIR}/)
 
+# Generate versionfile
 add_custom_target(genversion)
 
 add_custom_command(TARGET genversion POST_BUILD
@@ -96,11 +104,14 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     COMMAND ${CMAKE_COMMAND}
     -DLARCENY=${RAPID_GAMBIT_LARCENY}
     -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
+    -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
     -DENTRYPOINT=${rapid-gambit-bootstrap}
+    -DMAIN=${rapid-gambit-main}
     -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
     -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
     DEPENDS 
     ${rapid-gambit-bootstrap}
+    ${rapid-gambit-main}
     ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
     ${RAPID_SCHEME_VERSION}
     COMMENT "Generating R7RS core with Larceny(core.scm)"
