@@ -8,6 +8,7 @@
 (include "@RAPID_GAMBIT_ROOT@/rt/values-utils.scm")
 
 ;; Load R7RS procedures
+(include "@RAPID_GAMBIT_ROOT@/r7/_override.scm")
 (include "@RAPID_GAMBIT_ROOT@/r7/base.scm")
 (include "@RAPID_GAMBIT_ROOT@/r7/process-context.scm")
 
