@@ -1,8 +1,11 @@
+cmake_minimum_required(VERSION 2.8.4)
+project(rapid-gambit NONE)
+
 #
 # Rapid-Gambit build script.
 #
 #
-# Tool locations are saved on CMakeCache.txt
+# Component locations are saved on CMakeCache.txt
 # To change locations,
 #
 #  cmake -DRAPID_GAMBIT_LARCENY=/path/to/larceny .
@@ -10,16 +13,13 @@
 # on configured directory(or just try 'cmake-gui .').
 #
 
+#
+# Configurable options
+#
 
-cmake_minimum_required(VERSION 2.8.4)
-project(rapid-gambit NONE)
-
-# FIXME: Detect them
 set(RAPID_SCHEME_ROOT
-    "${CMAKE_CURRENT_LIST_DIR}/../rapid-scheme")
-
-set(RAPID_GAMBIT_ROOT
-    "${CMAKE_CURRENT_SOURCE_DIR}")
+    "${CMAKE_CURRENT_LIST_DIR}/rapid-scheme"
+    CACHE FILEPATH "Path to rapid-scheme root")
 
 find_program(RAPID_GAMBIT_GSC
     gsc
@@ -37,6 +37,9 @@ find_program(RAPID_GAMBIT_LARCENY
 
 # set(RAPID_GAMBIT_LARCENY
 #    "/cygdrive/c/prog/larceny-0.99-bin-native-ia32-win32/larceny.bat")
+
+set(RAPID_GAMBIT_ROOT # Obsolete (no longer optional)
+    "${CMAKE_CURRENT_SOURCE_DIR}")
 
 if(WIN32 OR CYGWIN)
     set(exeext ".exe")
@@ -77,10 +80,16 @@ endforeach()
 
 set(rapid-gambit-srcs ${_templist})
 
+add_custom_target(genversion)
 
-# FIXME: Use Git to generate version
-add_custom_command(OUTPUT ${RAPID_SCHEME_VERSION}
-    COMMAND ${CMAKE_COMMAND} -E touch ${RAPID_SCHEME_VERSION})
+add_custom_command(TARGET genversion POST_BUILD
+    COMMAND ${CMAKE_COMMAND} 
+    -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
+    -DOUT=${RAPID_SCHEME_VERSION}
+    -DTEMP=${RAPID_SCHEME_VERSION}.current
+    -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-version-scm.cmake
+    DEPENDS ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-version-scm.cmake
+    )
 
 # core.scm
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
@@ -120,22 +129,38 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/entrypoint.scm.in
     @ONLY)
 
 # rapid-gambit
-add_custom_command(OUTPUT ${RAPID_GAMBIT}
+
+set(compiled-frontend-c
+    ${CMAKE_CURRENT_BINARY_DIR}/rapid-gambit.c
+    )
+
+add_custom_command(OUTPUT ${compiled-frontend-c}
     COMMAND ${RAPID_GAMBIT_GSC}
-    -o ${RAPID_GAMBIT}
-    -exe
+    -c
+    -o ${compiled-frontend-c}
     ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
+    COMMENT "Compiling rapid-gambit(SCM->C: takes some time...)"
     DEPENDS
     ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
     ${rapid-gambit-srcs}
     ${CMAKE_CURRENT_BINARY_DIR}/buildconfig.scm
     ${CMAKE_CURRENT_BINARY_DIR}/config.scm
     ${CMAKE_CURRENT_BINARY_DIR}/core0.scm
-    COMMENT "Compiling rapid-gambit(take some time...)"
+    )
+
+add_custom_command(OUTPUT ${RAPID_GAMBIT}
+    COMMAND ${RAPID_GAMBIT_GSC}
+    -o ${RAPID_GAMBIT}
+    -exe
+    ${compiled-frontend-c}
+    DEPENDS
+    ${compiled-frontend-c}
+    COMMENT "Compiling rapid-gambit(Codegen: takes some time...)"
     )
 
 add_custom_target(rapid-gambit ALL
     DEPENDS ${RAPID_GAMBIT})
+add_dependencies(rapid-gambit genversion)
 
 message(STATUS "")
 message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")
