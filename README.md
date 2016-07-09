@@ -19,15 +19,22 @@ Build script will automagically converts Cygwin path into Win32 path when invoke
 
 # Build
 
-Since rapid-scheme is written in R7RS and Gambit is R5RS, we will need other R7RS to bootstrap.
+Since rapid-scheme is written in R7RS and Gambit is R5RS, we will need other R7RS to bootstrap. Currently we use Larceny for this purpose.
 
-CMakeLists.txt assume `rapid-scheme` is checked out on the parent directory.
+CMakeLists.txt assume `rapid-scheme` submodule initialized properly.
 
 ```sh
+# Initialize submodule first
+git submodule update --init
+
+# Create build directory anywhere you want
 mkdir build
 chdir build
+
+# Generate Makefile
 cmake ../
 make
+
 # To run R7RS program,
 ./rapid-scheme -I /path/to/rapid-scheme -I /path/to/rapid-scheme/share prog.scm
 ```
