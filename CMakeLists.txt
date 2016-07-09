@@ -3,6 +3,8 @@ project(rapid-gambit NONE)
 
 
 # FIXME: Detect them
+set(RAPID_GAMBIT_ROOT
+    "${CMAKE_CURRENT_SOURCE_DIR}")
 set(RAPID_SCHEME_ROOT
     "${CMAKE_CURRENT_LIST_DIR}/../rapid-scheme")
 set(RAPID_GAMBIT_GSC
@@ -23,8 +25,8 @@ set(RAPID_GAMBIT "${CMAKE_CURRENT_BINARY_DIR}/rapid-gambit${exeext}")
 # Version data for rapid-scheme
 set(RAPID_SCHEME_VERSION "${CMAKE_CURRENT_BINARY_DIR}/VERSION-rapid-scheme.scm")
 
-set(rapid-gambit-entrypoint
-    rapid-gambit-interp.scm)
+set(rapid-gambit-bootstrap
+    rapid-compiler-gambit.scm)
 
 set(rapid-gambit-srcs
     # Rapid-scheme runtimes
@@ -36,8 +38,8 @@ set(rapid-gambit-srcs
     r7/base.scm
     )
 
-set(rapid-gambit-entrypoint 
-    ${CMAKE_CURRENT_LIST_DIR}/${rapid-gambit-entrypoint})
+set(rapid-gambit-bootstrap
+    ${CMAKE_CURRENT_LIST_DIR}/${rapid-gambit-bootstrap})
 
 set(_templist)
 foreach(e ${rapid-gambit-srcs})
@@ -56,10 +58,11 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     COMMAND ${CMAKE_COMMAND}
     -DLARCENY=${RAPID_GAMBIT_LARCENY}
     -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
-    -DENTRYPOINT=${CMAKE_CURRENT_LIST_DIR}/rapid-compiler-gambit.scm
+    -DENTRYPOINT=${rapid-gambit-bootstrap}
     -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
     -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
     DEPENDS 
+    ${rapid-gambit-bootstrap}
     ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
     ${RAPID_SCHEME_VERSION}
     COMMENT "Generating R7RS core with Larceny(core.scm)"
@@ -83,14 +86,18 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/buildconfig.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/buildconfig.scm
     @ONLY)
 
+configure_file(${CMAKE_CURRENT_LIST_DIR}/entrypoint.scm.in
+    ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
+    @ONLY)
+
 # rapid-gambit
 add_custom_command(OUTPUT ${RAPID_GAMBIT}
     COMMAND ${RAPID_GAMBIT_GSC}
     -o ${RAPID_GAMBIT}
     -exe
-    ${rapid-gambit-entrypoint}
+    ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
     DEPENDS
-    ${rapid-gambit-entrypoint}
+    ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
     ${rapid-gambit-srcs}
     ${CMAKE_CURRENT_BINARY_DIR}/buildconfig.scm
     ${CMAKE_CURRENT_BINARY_DIR}/config.scm

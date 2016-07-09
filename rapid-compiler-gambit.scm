@@ -21,6 +21,7 @@
 (import (rapid base)
 	(scheme process-context)
 	(scheme write)
+        (scheme file)
 	(rapid and-let)
 	(rapid error)
 	(rapid format)
@@ -30,7 +31,7 @@
 	(rapid libraries)
 	(rapid compiler))
 
-(define (write-filtered x)
+(define (write-filtered x port)
   (define (xmap obj)
     (cond
       ((pair? obj)
@@ -45,11 +46,12 @@
       ((vector? obj) (list 'quote obj))
       ((string? obj) (string-copy obj))
       (else obj)))
-  (write-shared (xmap x)))
+  (write-shared (xmap x) port))
 
 (define (help)
   (write-string
    (format "Usage: ~a [OPTION] file\n  \
+              -o,           output filename\n  \
               -d, --debug   print more information about progress\n  \
               -I, --include prepends a library search directory\n  \
               -h, --help    display this help and exit\n  \
@@ -58,10 +60,21 @@
   (newline)
   (emit-bug-reporting-address))
 
+(define output-filename #f)
+
+(define (open-output-file/force fn)
+  (when (file-exists? fn)
+    (delete-file fn))
+  (open-output-file fn))
+
 (let-values
     (((input)
       (args-fold (cdr (command-line))
 		 (list
+                  (option '(#\o) #t #f
+                          (lambda (option name arg input)
+                            (set! output-filename arg)
+                            input))
 		  (option '(#\d "debug") #f #f
 			  (lambda (option name arg input)
 			    (current-log-level 'info)
@@ -94,5 +107,10 @@
 
   (and-let*
       ((expanded-program (compile input)))
-    (map write-filtered expanded-program)
-    (newline)))
+    (let ((p (or (and output-filename 
+                      (open-output-file/force output-filename))
+                 (current-output-port))))
+     (for-each (lambda (sexp) 
+                 (write-filtered sexp p))
+               expanded-program))
+    (unless output-filename (newline))))
