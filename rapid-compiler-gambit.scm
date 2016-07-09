@@ -110,7 +110,13 @@
     (let ((p (or (and output-filename 
                       (open-output-file/force output-filename))
                  (current-output-port))))
-     (for-each (lambda (sexp) 
-                 (write-filtered sexp p))
-               expanded-program))
+      (for-each (lambda (sexp) 
+                  (write-filtered sexp p)
+                  (when output-filename
+                    (newline p)))
+                expanded-program)
+      (when output-filename
+        (flush-output-port p)
+        (close-port p)))
     (unless output-filename (newline))))
+
