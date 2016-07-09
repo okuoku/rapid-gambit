@@ -1,0 +1,2 @@
+;; config
+(define %%config-install-prefix "@CMAKE_INSTALL_PREFIX@")
