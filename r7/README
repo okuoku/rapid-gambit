@@ -5,11 +5,8 @@ Libraries
 
 - (scheme base)
 
-  On Gambit, `raise` is actually R7RS `raise-continuable`.
-
   * eof-object - not optimal
   * member - Override
-  * string-copy - Override
   * u8-ready? - Not implemented (never)
   * flush-output-port - No-op
 

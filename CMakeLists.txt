@@ -1,11 +1,25 @@
+#
+# Rapid-Gambit build script.
+#
+#
+# Tool locations are saved on CMakeCache.txt
+# To change locations,
+#
+#  cmake -DRAPID_GAMBIT_LARCENY=/path/to/larceny .
+#
+# on configured directory(or just try 'cmake-gui .').
+#
+
+
 cmake_minimum_required(VERSION 2.8.4)
 project(rapid-gambit NONE)
 
 # FIXME: Detect them
-set(RAPID_GAMBIT_ROOT
-    "${CMAKE_CURRENT_SOURCE_DIR}")
 set(RAPID_SCHEME_ROOT
     "${CMAKE_CURRENT_LIST_DIR}/../rapid-scheme")
+
+set(RAPID_GAMBIT_ROOT
+    "${CMAKE_CURRENT_SOURCE_DIR}")
 
 find_program(RAPID_GAMBIT_GSC
     gsc

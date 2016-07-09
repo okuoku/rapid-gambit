@@ -1,9 +1,10 @@
 # rapid-gambit
-Gambit support for [rapid-scheme](https://gitlab.com/nieper/rapid-scheme).
+
+Gambit port of [rapid-scheme](https://www.rapid-scheme.org/).
 
 # Status
 
-Just selfhosted; rapid-compiler compiled with `gsc` successfully expands rapid-compiler itself.
+Now runs some R7RS code with Gambit interpreter; rapid-compiler compiled with `gsc` successfully runs rapid-scheme frontend itself.
 
 Most of R7RS libraries are still missing.
 
@@ -27,6 +28,8 @@ mkdir build
 chdir build
 cmake ../
 make
+# To run R7RS program,
+./rapid-scheme -I /path/to/rapid-scheme -I /path/to/rapid-scheme/share prog.scm
 ```
 
 CMakeLists.txt will accept following variables:
@@ -36,3 +39,12 @@ CMakeLists.txt will accept following variables:
 - `RAPID_GAMBIT_LARCENY` - Path to Larceny executable
 
 FIXME: Currently it has no `install` target.
+
+# License
+
+Rapid-Gambit is combination of:
+
+- Modified rapid-scheme code which is GPL3. See the file header and COPYING.GPL3
+- Glue code and support scripts including `CMakeLists.txt`:
+  I hereby release it into the Public domain.
+
