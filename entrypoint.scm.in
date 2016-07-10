@@ -1,7 +1,9 @@
 #!@RAPID_GAMBIT_GSI@
 
-;; Clobber libary import syntax
-(define-macro (import . bogus) '(begin 'bogus))
+(declare
+  (block)
+  ;; Runtime libraries may be called from eval-ed proceduers
+  (not optimize-dead-definitions))
 
 (include "@CMAKE_CURRENT_BINARY_DIR@/VERSION-rapid-scheme.scm")
 (include "@CMAKE_CURRENT_BINARY_DIR@/config.scm")
