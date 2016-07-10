@@ -22,6 +22,8 @@ Libraries
   * `member` - Override
   * `u8-ready?` - Not implemented (never)
   * `flush-output-port` - No-op
+  * `utf8->string` - test this
+  * `string->utf8` - test this
 
   MANY unimplemted procedures.
 

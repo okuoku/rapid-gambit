@@ -136,6 +136,7 @@
 (define bytevector-length u8vector-length)
 (define bytevector-u8-ref u8vector-ref)
 (define bytevector-u8-set! u8vector-set!)
+(define make-bytevector make-u8vector)
 
 ;; Strings
 (define string-copy:r5 string-copy)
@@ -187,6 +188,115 @@
 
 (define (flush-output-port . ignored) 'bogus)
 
+;; R7RS String
+
+(define (%utf8->string u8) ;; FIXME: Detect illegal sequence more strictly
+  (define len (u8vector-length u8))
+  (define (complain) (error "Illegal utf8 sequence" u8))
+  (call-with-output-string
+    '()
+    (lambda (p)
+      (let loop ((idx 0))
+       (define rest (- len idx))
+       (cond
+         ((= idx len)
+          ;; DONE
+          p)
+         (else
+           (let ((c0 (u8vector-ref u8 idx)))
+            (cond
+              ((< c0 #x80) ;; 1 byte
+               (write-char (integer->char c0) p)
+               (loop (+ 1 idx)))
+              ((< c0 #xe0) ;; 2 bytes
+               (if (< rest 1) (complain))
+               (let* ((c1 (u8vector-ref u8 (+ 1 idx)))
+                      (i (bitwise-ior
+                           (arithmetic-shift (bitwise-and #x1f c0) 6)
+                           (bitwise-and #x3f c1))))
+                 (write-char (integer->char i) p))
+               (loop (+ 2 idx)))
+              ((< c0 #xf0) ;; 3 bytes
+               (if (< rest 2) (complain))
+               (let* ((c1 (u8vector-ref u8 (+ 1 idx)))
+                      (c2 (u8vector-ref u8 (+ 2 idx)))
+                      (i (bitwise-ior
+                           (arithmetic-shift (bitwise-and #xf c0) 12)
+                           (arithmetic-shift (bitwise-and #x3f c1) 6)
+                           (bitwise-and #x3f c2))))
+                 (write-char (integer->char i) p))
+               (loop (+ 3 idx)))
+              ((< c0 #xf5) ;; 4 bytes
+               (if (< rest 3) (complain))
+               (let* ((c1 (u8vector-ref u8 (+ 1 idx)))
+                      (c2 (u8vector-ref u8 (+ 2 idx)))
+                      (c3 (u8vector-ref u8 (+ 3 idx)))
+                      (i (bitwise-ior
+                           (arithmetic-shift (bitwise-and #x7 c0) 18)
+                           (arithmetic-shift (bitwise-and #x3f c1) 12)
+                           (arithmetic-shift (bitwise-and #x3f c2) 6)
+                           c3)))
+                 (write-char (integer->char i) p))
+               (loop (+ 4 idx)))
+              (else (complain))))))))))
+
+(define utf8->string
+  (case-lambda
+    ((u8) (%utf8->string u8))
+    ((u8 start) (%utf8->string (subu8vector u8 start (u8vector-length u8))))
+    ((u8 start end) (%utf8->string (subu8vector u8 start end)))))
+
+(define (%string->utf8 str)
+  (define len (string-length str))
+  (call-with-output-u8vector 
+    '()
+    (lambda (p)
+      (let loop ((idx 0))
+       (cond
+         ((= idx len)
+          ;; DONE
+          p)
+         (else
+           (let ((i (char->integer (string-ref str idx))))
+            (cond
+              ((< i #x80) ;; 1 byte
+               (write-u8 i p))
+              ((< i #x800) ;; 2 bytes
+               (let ((c0 (bitwise-ior #xc0 (bitwise-and 
+                                             #x1f (arithmetic-shift i -6))))
+                     (c1 (bitwise-ior #x80 (bitwise-and #x3f i))))
+                 (write-u8 c0 p)
+                 (write-u8 c1 p)))
+              ((< i #x10000) ;; 3 bytes
+               (let ((c0 (bitwise-ior #xe0 (bitwise-and 
+                                             #xf (arithmetic-shift i -12))))
+                     (c1 (bitwise-ior #x80 (bitwise-and
+                                             #x3f (arithmetic-shift i -6))))
+                     (c2 (bitwise-ior #x80 (bitwise-and #x3f i))))
+                 (write-u8 c0 p)
+                 (write-u8 c1 p)
+                 (write-u8 c2 p)))
+              ((< i #x110000) ;; 4 bytes
+               (let ((c0 (bitwise-ior #xf0 (bitwise-and
+                                             #x7 (arithmetic-shift i -18))))
+                     (c1 (bitwise-ior #x80 (bitwise-and
+                                             #x3f (arithmetic-shift i -12))))
+                     (c2 (bitwise-ior #x80 (bitwise-and
+                                             #x3f (arithmetic-shift i -6))))
+                     (c3 (bitwise-ior #x80 (bitwise-and #x3f i))))
+                 (write-u8 c0 p)
+                 (write-u8 c1 p)
+                 (write-u8 c2 p)
+                 (write-u8 c3 p)))
+              (else
+                (error "Invalid character" i str))))
+           (loop (+ 1 idx))))))))
+
+(define string->utf8
+  (case-lambda
+    ((str) (%string->utf8 str))
+    ((str start) (%string->utf8 (substring str start (string-length str))))
+    ((str start end) (%string->utf8 (substring str start end)))))
 
 '(NOT-IMPLEMENTED:
    ;; R7RS I/O
@@ -204,7 +314,6 @@
    input-port-open?
 
    bytevector-copy! 
-   make-bytevector 
 
    features 
    list-copy
@@ -212,9 +321,6 @@
    make-list
    syntax-error
    textual-port?
-
-   ;; R7RS Errors
-
 
    ;; R7RS Math
    exact-integer-sqrt 
@@ -226,8 +332,6 @@
    truncate/
 
    ;; R7RS String
-   utf8->string 
-   string->utf8 
    string->vector
    string-copy! 
    string-map 
