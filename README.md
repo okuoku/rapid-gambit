@@ -4,7 +4,7 @@ Gambit port of [rapid-scheme](https://www.rapid-scheme.org/).
 
 # Status
 
-Now it runs some R7RS code with Gambit interpreter; rapid-compiler compiled 
+It runs some R7RS code with Gambit interpreter; rapid-compiler compiled 
 with `gsc` successfully runs rapid-scheme frontend itself.
 
 Most of R7RS libraries are still missing.
@@ -24,7 +24,7 @@ invoke Larceny to bootstrap rapid-scheme.
 Since rapid-scheme is written in R7RS and Gambit is R5RS, we will need other 
 R7RS to bootstrap. Currently we use Larceny for this purpose.
 
-CMakeLists.txt assume `rapid-scheme` submodule initialized properly.
+CMakeLists.txt assumes `rapid-scheme` submodule initialized properly.
 
 ```sh
 # Initialize submodule first
@@ -53,11 +53,31 @@ CMakeLists.txt will accept following variables:
 - `RAPID_GAMBIT_GSC`     - Path to Gambit's `gsc` executable
 - `RAPID_GAMBIT_LARCENY` - Path to Larceny executable to bootstrap
 
+# Repository structure
+
+Compiled-in/distributed with rapid-gambit executable:
+
+- `rt`  - Runtime procedures/macros for rapid-scheme
+- `r7`  - R7RS procedures
+- `src` - Sources for `rapid-gambit` program/frontend support
+- `lib` - Standard libraries for `rapid-gambit` in R7RS form
+
+Build support:
+
+- `cmake` - Support scripts written in CMake language
+- `build` - Bootstrap/build support scripts
+
+External project:
+
+- `rapid-scheme` - Git submodule of rapid-scheme project
+  It can override with `RAPID_SCHEME_ROOT` CMake variable
+
 # License
 
 Rapid-Gambit is combination of:
 
-- Modified rapid-scheme code which is GPL3. See the file header and COPYING.GPL3
+- Modified rapid-scheme code which is GPL3+. 
+  See the file header and COPYING.GPL3
 - Glue code and support scripts including `CMakeLists.txt`:
   I hereby release it into the Public domain.
 

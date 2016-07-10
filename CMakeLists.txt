@@ -56,10 +56,10 @@ set(RAPID_GAMBIT "${CMAKE_CURRENT_BINARY_DIR}/rapid-gambit${exeext}")
 set(RAPID_SCHEME_VERSION "${CMAKE_CURRENT_BINARY_DIR}/VERSION-rapid-scheme.scm")
 
 set(rapid-gambit-bootstrap
-    rapid-compiler-bootstrap.scm)
+    build/rapid-compiler-bootstrap.scm)
 
 set(rapid-gambit-main
-    rapid-gambit-main.scm)
+    src/rapid-gambit-main.scm)
 
 set(rapid-gambit-srcs
     # Rapid-scheme runtimes
@@ -126,7 +126,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     )
 
 # core0.scm
-configure_file(${CMAKE_CURRENT_LIST_DIR}/gen.scm.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/build/gen.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/gen.scm
     @ONLY)
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core0.scm
@@ -139,15 +139,15 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core0.scm
     ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     COMMENT "Expand Larceny SEXP into Gambit forms(core0.scm)")
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/config.scm.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/config.scm
     @ONLY)
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/buildconfig.scm.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/buildconfig.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/buildconfig.scm
     @ONLY)
 
-configure_file(${CMAKE_CURRENT_LIST_DIR}/entrypoint.scm.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/entrypoint.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
     @ONLY)
 
