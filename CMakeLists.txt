@@ -126,14 +126,18 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     )
 
 # core0.scm
+configure_file(${CMAKE_CURRENT_LIST_DIR}/gen.scm.in
+    ${CMAKE_CURRENT_BINARY_DIR}/gen.scm
+    @ONLY)
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core0.scm
     COMMAND ${RAPID_GAMBIT_GSI}
-    ${CMAKE_CURRENT_LIST_DIR}/gen.scm
+    ${CMAKE_CURRENT_BINARY_DIR}/gen.scm
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS
-    ${CMAKE_CURRENT_LIST_DIR}/gen.scm
+    ${rapid-gambit-srcs}
+    ${CMAKE_CURRENT_BINARY_DIR}/gen.scm
     ${CMAKE_CURRENT_BINARY_DIR}/core.scm
-    COMMENT "Convert Larceny SEXP into Gambit form(core0.scm)")
+    COMMENT "Expand Larceny SEXP into Gambit forms(core0.scm)")
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/config.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/config.scm
@@ -156,6 +160,7 @@ set(compiled-frontend-c
 add_custom_command(OUTPUT ${compiled-frontend-c}
     COMMAND ${RAPID_GAMBIT_GSC}
     -c
+    -track-scheme
     -o ${compiled-frontend-c}
     ${CMAKE_CURRENT_BINARY_DIR}/entrypoint.scm
     COMMENT "Compiling rapid-gambit(SCM->C: takes some time...)"

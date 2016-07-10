@@ -1,0 +1,31 @@
+#!@RAPID_GAMBIT_GSI@
+
+(include "@RAPID_GAMBIT_ROOT@/rt/case-lambda.scm")
+(include "@RAPID_GAMBIT_ROOT@/rt/values-utils.scm")
+(include "@RAPID_GAMBIT_ROOT@/r7/eval.scm") ;; For %%expand-input
+(include "@RAPID_GAMBIT_ROOT@/r7/_override.scm")
+
+(define gensym-counter 0)
+
+(define (gensym-static)
+  (set! gensym-counter (+ 1 gensym-counter))
+  (string->symbol
+    (string-append
+      "Ha~~"
+      (number->string gensym-counter))))
+
+(define (gensym . bogus) (gensym-static))
+
+;; Generate source from Larceny output
+(define psrc (open-input-file "core.scm"))
+
+(define (gensrc port name)
+  (define l (read-all port))
+  (let ((outp (open-output-file name)))
+   (for-each (lambda (sexp)
+               (pp (%%inject-r7-override (%%expand-input sexp)) outp)
+               (newline outp))
+             (cdr l))
+   (close-port outp)))
+
+(gensrc psrc "core0.scm")
