@@ -94,6 +94,14 @@ endmacro()
 list_prefix(rapid-gambit-srcs ${CMAKE_CURRENT_SOURCE_DIR}/)
 list_prefix(rapid-gambit-lib-srcs ${CMAKE_CURRENT_SOURCE_DIR}/)
 
+get_filename_component(RAPID_GAMBIT_GSC_bin
+    ${RAPID_GAMBIT_GSC}
+    PATH)
+
+get_filename_component(RAPID_GAMBIT_GSC_LIB
+    ${RAPID_GAMBIT_GSC_bin}/../lib
+    ABSOLUTE)
+
 # Generate versionfile
 add_custom_target(genversion)
 
@@ -174,8 +182,11 @@ add_custom_command(OUTPUT ${compiled-frontend-c}
 
 add_custom_command(OUTPUT ${RAPID_GAMBIT}
     COMMAND ${RAPID_GAMBIT_GSC}
+    #-verbose
     -o ${RAPID_GAMBIT}
+    -l ~~lib/_gambitgsc
     -cc-options "\"-D___SINGLE_HOST\" -O1"
+    -ld-options "\"${RAPID_GAMBIT_GSC_LIB}/libgambitgsc.a\""
     -exe
     ${compiled-frontend-c}
     DEPENDS

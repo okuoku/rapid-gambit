@@ -60,7 +60,8 @@
               -v, --version output version information and exit\n"
 	   (car (command-line))))
   (newline)
-  (emit-bug-reporting-address))
+  ;(emit-bug-reporting-address)
+  )
 
 (define output-filename #f)
 (define eval-now! #f)
@@ -99,6 +100,7 @@
                             (display (buildconfig-version/rapid-scheme))
                             (display "]\n")
 			    (version-etc "rapid-gambit")
+                            (display "Includes Gambit-C http://gambitscheme.org")
 			    (exit)))
 		  (option '(#\I "include") #t #t
 			  (lambda (option name arg input)
