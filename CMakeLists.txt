@@ -194,9 +194,9 @@ add_custom_command(OUTPUT ${RAPID_GAMBIT}
     COMMENT "Compiling rapid-gambit(Codegen: takes some time...)"
     )
 
-add_custom_target(rapid-gambit ALL
+add_custom_target(rapid-gambit-executable ALL
     DEPENDS ${RAPID_GAMBIT})
-add_dependencies(rapid-gambit genversion)
+add_dependencies(rapid-gambit-executable genversion)
 
 # install targets
 install(PROGRAMS
@@ -207,6 +207,18 @@ install(DIRECTORY
     ${RAPID_SCHEME_ROOT}/share/rapid
     ${RAPID_SCHEME_ROOT}/share/scheme
     DESTINATION ${RAPID_GAMBIT_LIBPATH})
+
+if(NOT RAPID_GAMBIT_LARCENY)
+    message(FATAL_ERROR "Larceny executable(RAPID_GAMBIT_LARCENY) not found.")
+endif()
+
+if(NOT RAPID_GAMBIT_GSI)
+    message(FATAL_ERROR "Gambit GSI executable(RAPID_GAMBIT_GSI) not found.")
+endif()
+
+if(NOT RAPID_GAMBIT_GSC)
+    message(FATAL_ERROR "Gambit GSC executable(RAPID_GAMBIT_GSI) not found.")
+endif()
 
 message(STATUS "")
 message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")

@@ -36,16 +36,18 @@ execute_process(
     ${TEMP} ${OUT})
 
 if(${version} STREQUAL "unknown")
-    message(STATUS "WARNING: Unknown version. Force rebuilding.")
-    execute_process(
-        COMMAND ${CMAKE_COMMAND}
-        -E touch ${OUT})
+    message(STATUS "WARNING: Unknown version. Please 'clean' when update rapid-scheme")
+    #    message(STATUS "WARNING: Unknown version. Force rebuilding.")
+    #execute_process(
+    #    COMMAND ${CMAKE_COMMAND}
+    #    -E touch ${OUT})
 endif()
 
 if(${version} MATCHES "-dirty")
-    message(STATUS "WARNING: It seems uncommited change exists. Force rebuilding.")
-    execute_process(
-        COMMAND ${CMAKE_COMMAND}
-        -E touch ${OUT})
+    message(STATUS "WARNING: It seems rapid-scheme repository has uncommitted change(s)")
+    #message(STATUS "WARNING: It seems uncommited change exists. Force rebuilding.")
+    #execute_process(
+    #    COMMAND ${CMAKE_COMMAND}
+    #    -E touch ${OUT})
 endif()
 

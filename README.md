@@ -31,8 +31,8 @@ CMakeLists.txt assumes `rapid-scheme` submodule initialized properly.
 git submodule update --init
 
 # Create build directory anywhere you want
-mkdir build
-cd build
+mkdir _build
+cd _build
 
 # Generate Makefile
 cmake -DCMAKE_INSTALL_PREFIX=/opt/rapid-gambit ../   # Path to this repository
