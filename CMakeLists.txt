@@ -227,3 +227,21 @@ message(STATUS "gsc(RAPID_GAMBIT_GSC) = ${RAPID_GAMBIT_GSC}")
 message(STATUS "larceny(RAPID_GAMBIT_LARCENY) = ${RAPID_GAMBIT_LARCENY}")
 message(STATUS "")
 
+
+# Tests
+
+enable_testing()
+
+function(add_testrun nam src wrkdir)
+    add_test(NAME ${nam}
+        COMMAND ${RAPID_GAMBIT}
+        -I ${RAPID_SCHEME_ROOT} -I ${RAPID_SCHEME_ROOT}/share
+        ${src}
+        WORKING_DIRECTORY ${wrkdir})
+endfunction()
+
+add_testrun(trivial ${CMAKE_CURRENT_LIST_DIR}/tests/trivial.scm
+    ${CMAKE_CURRENT_BINARY_DIR})
+add_testrun(rapid-scheme-test ${RAPID_SCHEME_ROOT}/tests.scm
+    ${RAPID_SCHEME_ROOT})
+
