@@ -16,14 +16,15 @@ Libraries
   R7RS bytevectors are mapped to Gambit u8vector.
 
   * `raise-continuable` - needs some consideration
-  * `vector-for-each` - not optimal
-  * `vector-map` - not optimal
-  * `eof-object` - not optimal
-  * `member` - Override
-  * `u8-ready?` - Not implemented (never)
+  * `vector-for-each`   - not optimal
+  * `vector-map`        - not optimal
+  * `eof-object`        - not optimal
+  * `equal?`            - not optimal
+  * `member`            - Override
+  * `u8-ready?`         - Not implemented (never)
   * `flush-output-port` - No-op
-  * `utf8->string` - test this
-  * `string->utf8` - test this
+  * `utf8->string`      - test this
+  * `string->utf8`      - test this
 
   MANY unimplemted procedures.
 

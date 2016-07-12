@@ -124,6 +124,109 @@
   (and (apply %%for-all (map boolean? bs))
        (apply %%fold-all eqv? bs)))
 
+
+; Mostly same algorithm as Chez.
+;; Efficient Nondestructive Equality Checking for Trees and Graphs (ICFP 2008)
+;; by Michael D. Adams and R. Kent Dybvig
+
+(define (equal?:r7 x y)
+  ;; FIXME: Implement interleaved version
+  (define k0 400) ;; Took from section 4.2  (Chez uses 200)
+  ;(define kb -40)
+  ;; box
+  (define (box? b) (pair? b))
+  (define (box obj) (list obj))
+  (define (unbox b) (car b))
+  (define (set-box!/false b v) (set-car! b v) #f)
+  ;; Gambit: use tables for hash-table replacement
+  (define (tbl-new) (make-table size: 400 test: eq? hash: eq?-hash))
+
+  ;; union-find: As in the paper + some folding
+  (define (union-find tbl x y)
+    (define (tbl-add!/false obj v) (table-set! tbl obj v) #f) ;; v: boxes
+    (define (tbl-ref obj) (table-ref tbl obj #f))
+    (define (find b)
+      (let ((n (unbox b)))
+       (if (box? n)
+         (let loop ((b b) (n n))
+          (let ((nn (unbox n)))
+           (cond ((box? n)
+                  (set-box!/false b nn)
+                  (loop n nn))
+                 (else n))))
+         b)))
+    (let ((bx (tbl-ref x))
+          (by (tbl-ref y)))
+      (if (not bx)
+        (if (not by)
+          (let ((b (box 1)))
+           (tbl-add!/false x b)
+           (tbl-add!/false y b))
+          (let ((ry (find by)))
+           (tbl-add!/false x ry)))
+        (if (not by)
+          (let ((rx (find bx)))
+           (tbl-add!/false y rx))
+          (let ((rx (find bx))
+                (ry (find by)))
+            (or (eq? rx ry)
+                (let ((nx (unbox rx))
+                      (ny (unbox ry)))
+                  (cond ((> nx ny)
+                         (set-box!/false ry rx)
+                         (set-box!/false rx (+ nx ny)))
+                        (else 
+                          (set-box!/false rx ry)
+                          (set-box!/false ry (+ nx ny)))))))))))
+
+  (define (pre? x y k)
+    (cond
+      ((eq? x y) k)
+      ((pair? x)
+       (and (pair? y)
+            (if (<= k 0)
+              k
+              (let ((k (pre? (car x) (car y) (- k 1))))
+               (and k (pre? (cdr x) (cdr y) k))))))
+      ((vector? x)
+       (and (vector? y)
+            (let ((n (vector-length x)))
+             (and (= n (vector-length y))
+                  (let loop ((i 0) (k k))
+                   (if (or (= i n) (<= k 0))
+                     k
+                     (let ((k (pre? (vector-ref x i)
+                                    (vector-ref y i)
+                                    (- k 1))))
+                       (and k (loop (+ i 1) k)))))))))
+      (else (and (equal? x y) k))))
+
+  ;; uf-equal?
+  (define (uf-equal? x y) 
+    (let ((tbl (tbl-new)))
+     (define (e? x y)
+       (cond ((eq? x y) ;; Short cut
+              #t)
+             ((pair? x)
+              (and (pair? y)
+                   (or (union-find tbl x y)
+                       (and (e? (car x) (car y))
+                            (e? (cdr x) (cdr y))))))
+             ((vector? x)
+              (and (vector? y)
+                   (let ((n (vector-length x)))
+                    (and (= n (vector-length y))
+                         (or (union-find tbl x y)
+                             (let loop ((i 0))
+                              (or (= i n)
+                                  (and (e? (vector-ref x i)
+                                           (vector-ref y i))
+                                       (loop (+ i 1))))))))))
+             (else (equal? x y))))
+     (e? x y)))
+  (let ((k (pre? x y k0))) 
+   (and k (or (> k 0) (uf-equal? x y)))))
+
 ;; R6RS name inexact/exact
 (define inexact exact->inexact)
 (define exact inexact->exact)
