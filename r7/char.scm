@@ -1,2 +1,2 @@
-(define (char-foldcase c) c)
-(define (string-foldcase str) str)
+(define char-foldcase char-downcase)
+(define (string-foldcase str) (string-map char-foldcase str))

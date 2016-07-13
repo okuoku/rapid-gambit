@@ -253,6 +253,10 @@
 (define (string-for-each p str)
   (for-each p (string->list str)))
 
+(define (string-map p . str*)
+  (list->string
+    (apply map p (map string->list str*))))
+
 ;; Loops
 (define member
   (case-lambda

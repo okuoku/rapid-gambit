@@ -36,13 +36,15 @@ cd _build
 
 # Generate Makefile
 cmake -DCMAKE_INSTALL_PREFIX=/opt/rapid-gambit ../   # Path to this repository
-make
 
-# To run R7RS program,
-./rapid-scheme -I /path/to/rapid-scheme -I /path/to/rapid-scheme/share prog.scm
+# Build and test
+make
+make test
 
 # Installation
 make install
+
+# Run program
 /opt/rapid-gambit/bin/rapid-gambit prog.scm
 ```
 

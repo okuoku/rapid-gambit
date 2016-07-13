@@ -32,8 +32,8 @@ Libraries
 
   NOT YET.
 
-  * `char-foldcase` - Stub (identity)
-  * `string-foldcase` - Stub (identity)
+  * `char-foldcase`     - Stub
+  * `string-foldcase`   - Stub
 
 - (scheme eval)
 
