@@ -33,6 +33,51 @@
 	(rapid compiler))
 
 (define (write-filtered x port)
+  ;; https://github.com/okuoku/yuni/issues/45
+  (define (check-sibr-xx)
+    (let* ((v0 (vector))
+           (v1 (vector-copy v0)))
+      (eq? v0 v1)))
+  (define (write-r5rssafe obj port)
+    (define (filt-wrt obj)
+      (cond
+        ((and (char? obj) (char=? #\escape obj))
+         (display "#\x1b" port))
+        (else
+          (write obj port))))
+    (define (pr obj)
+      (filt-wrt obj)
+      (display " " port))
+    (define (dotted-pr obj)
+      (define (itr obj)
+        (let ((a (car obj))
+              (d (cdr obj)))
+          (cond
+            ((pair? d)
+             (filt-wrt a)
+             (display " " port)
+             (itr d))
+            (else
+              (filt-wrt a)
+              (display " . " port)
+              (filt-wrt d)))))
+      (display " (")
+      (itr obj)
+      (display " )" port))
+    (cond 
+      ((list? obj)
+       (display " (" port)
+       (for-each pr obj)
+       (display ")" port))
+      ((pair? obj) ;; dotted-list or just a pair
+       (dotted-pr obj))
+      ((vector? obj)
+       (display "#(" port)
+       (vector-for-each pr obj)
+       (display ")" port))
+      (else (write-simple obj port))))
+
+  (define do-write (if (check-sibr-xx) write-r5rssafe write-shared))
   (define (xmap obj)
     (cond
       ((pair? obj)
@@ -44,10 +89,10 @@
           obj)
          (else
            (cons (xmap (car obj)) (xmap (cdr obj))))))
-      ((vector? obj) (list 'quote obj))
+      ((vector? obj) (list 'quote (vector-copy obj)))
       ((string? obj) (string-copy obj))
       (else obj)))
-  (write-shared (xmap x) port))
+  (do-write (xmap x) port))
 
 (define (help)
   (write-string

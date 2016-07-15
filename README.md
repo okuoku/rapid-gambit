@@ -12,12 +12,16 @@ Most of R7RS libraries are still missing.
 # Prerequisites
 
 - Larceny (0.99-) - Required for bootstrap rapid-scheme
+- or, chibi-scheme - Used when Larceny unavailable (slow)
 - Gambit (4.x)
 - CMake (2.8.1x or 3.x)
 
 Larceny can be Win32 native version even if you build on Cygwin. 
 Build script will automagically converts Cygwin path into Win32 path when 
 invoke Larceny to bootstrap rapid-scheme. 
+
+Build script will automatically detect chibi-scheme and use it when
+Larceny is not available. 
 
 # Build
 

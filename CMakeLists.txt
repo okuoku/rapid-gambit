@@ -35,6 +35,12 @@ find_program(RAPID_GAMBIT_LARCENY
     larceny
     )
 
+find_program(RAPID_GAMBIT_CHIBI_SCHEME
+    chibi-scheme
+    )
+
+option(RAPID_GAMBIT_USE_CHIBI_SCHEME "Use chibi-scheme to bootstrap(slow)" OFF)
+
 # set(RAPID_GAMBIT_LARCENY
 #    "/cygdrive/c/prog/larceny-0.99-bin-native-ia32-win32/larceny.bat")
 
@@ -115,23 +121,43 @@ add_custom_command(TARGET genversion POST_BUILD
     )
 
 # core.scm
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
-    COMMAND ${CMAKE_COMMAND}
-    -DLARCENY=${RAPID_GAMBIT_LARCENY}
-    -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
-    -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
-    -DENTRYPOINT=${rapid-gambit-bootstrap}
-    -DMAIN=${rapid-gambit-main}
-    -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
-    -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
-    DEPENDS 
-    ${rapid-gambit-bootstrap}
-    ${rapid-gambit-main}
-    ${rapid-gambit-lib-srcs}
-    ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
-    ${RAPID_SCHEME_VERSION}
-    COMMENT "Generating R7RS core with Larceny(core.scm)"
-    )
+if(RAPID_GAMBIT_USE_CHIBI_SCHEME)
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
+        COMMAND ${CMAKE_COMMAND}
+        -DCHIBI_SCHEME=${RAPID_GAMBIT_CHIBI_SCHEME}
+        -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
+        -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
+        -DENTRYPOINT=${rapid-gambit-bootstrap}
+        -DMAIN=${rapid-gambit-main}
+        -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
+        -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm-chibi-scheme.cmake
+        DEPENDS 
+        ${rapid-gambit-bootstrap}
+        ${rapid-gambit-main}
+        ${rapid-gambit-lib-srcs}
+        ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
+        ${RAPID_SCHEME_VERSION}
+        COMMENT "Generating R7RS core with Chibi-scheme(core.scm)"
+        )
+else()
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core.scm
+        COMMAND ${CMAKE_COMMAND}
+        -DLARCENY=${RAPID_GAMBIT_LARCENY}
+        -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
+        -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
+        -DENTRYPOINT=${rapid-gambit-bootstrap}
+        -DMAIN=${rapid-gambit-main}
+        -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
+        -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
+        DEPENDS 
+        ${rapid-gambit-bootstrap}
+        ${rapid-gambit-main}
+        ${rapid-gambit-lib-srcs}
+        ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm.cmake
+        ${RAPID_SCHEME_VERSION}
+        COMMENT "Generating R7RS core with Larceny(core.scm)"
+        )
+endif()
 
 # core0.scm
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/build/gen.scm.in
@@ -209,7 +235,18 @@ install(DIRECTORY
     DESTINATION ${RAPID_GAMBIT_LIBPATH})
 
 if(NOT RAPID_GAMBIT_LARCENY)
-    message(FATAL_ERROR "Larceny executable(RAPID_GAMBIT_LARCENY) not found.")
+    if(NOT RAPID_GAMBIT_USE_CHIBI_SCHEME)
+        if(RAPID_GAMBIT_CHIBI_SCHEME)
+            message(STATUS "Hint: You can use chibi-scheme with CMAKE Option -DRAPID_GAMBIT_USE_CHIBI_SCHEME=ON")
+        endif()
+        message(FATAL_ERROR "Larceny executable(RAPID_GAMBIT_LARCENY) not found.")
+    endif()
+endif()
+
+if(RAPID_GAMBIT_USE_CHIBI_SCHEME)
+    if(NOT RAPID_GAMBIT_CHIBI_SCHEME)
+        message(FATAL_ERROR "Chibi-scheme executable(RAPID_GAMBIT_CHIBI_SCHEME) not found.")
+    endif()
 endif()
 
 if(NOT RAPID_GAMBIT_GSI)
@@ -224,7 +261,11 @@ message(STATUS "")
 message(STATUS "rapid-scheme root(RAPID_SCHEME_ROOT) = ${RAPID_SCHEME_ROOT}")
 message(STATUS "gsi(RAPID_GAMBIT_GSI) = ${RAPID_GAMBIT_GSI}")
 message(STATUS "gsc(RAPID_GAMBIT_GSC) = ${RAPID_GAMBIT_GSC}")
-message(STATUS "larceny(RAPID_GAMBIT_LARCENY) = ${RAPID_GAMBIT_LARCENY}")
+if(RAPID_GAMBIT_USE_CHIBI_SCHEME)
+    message(STATUS "chibi-scheme(RAPID_GAMBIT_CHIBI_SCHEME) = ${RAPID_GAMBIT_CHIBI_SCHEME}")
+else()
+    message(STATUS "larceny(RAPID_GAMBIT_LARCENY) = ${RAPID_GAMBIT_LARCENY}")
+endif()
 message(STATUS "")
 
 
