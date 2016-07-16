@@ -42,7 +42,7 @@
     (define (filt-wrt obj)
       (cond
         ((and (char? obj) (char=? #\escape obj))
-         (display "#\x1b" port))
+         (display "#\\x1b" port))
         (else
           (write obj port))))
     (define (pr obj)
