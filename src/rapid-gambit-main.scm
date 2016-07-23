@@ -31,6 +31,7 @@
 	(rapid syntax)
 	(rapid libraries)
 	(rapid compiler)
+        (rapid-gambit currentstates)
         (rapid-gambit buildconfig))
 
 (define (write-filtered x port)
@@ -121,6 +122,9 @@
     (exit 1))
 
   (unless output-filename (set! eval-now! #t))
+
+  ;; Save states
+  (currentstate-libpath-set! (current-library-directories))
 
   (and-let*
       ((expanded-program (compile input)))

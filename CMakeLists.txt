@@ -69,6 +69,7 @@ set(rapid-gambit-main
 
 set(rapid-gambit-srcs
     # Rapid-scheme runtimes
+    rt/states.scm
     rt/case-lambda.scm
     rt/record-GPL3.scm
     rt/values-utils.scm
@@ -83,7 +84,8 @@ set(rapid-gambit-srcs
     )
 
 set(rapid-gambit-lib-srcs
-    lib/rapid-gambit/buildconfig.sld)
+    lib/rapid-gambit/buildconfig.sld
+    lib/rapid-gambit/currentstates.sld)
 
 set(rapid-gambit-bootstrap
     ${CMAKE_CURRENT_SOURCE_DIR}/${rapid-gambit-bootstrap})

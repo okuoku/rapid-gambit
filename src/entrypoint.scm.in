@@ -13,6 +13,7 @@
 ;(include "@CMAKE_CURRENT_BINARY_DIR@/_prologue.scm")
 
 ;; Load primitive libraries
+(include "@RAPID_GAMBIT_ROOT@/rt/states.scm")
 (include "@RAPID_GAMBIT_ROOT@/rt/case-lambda.scm")
 (include "@RAPID_GAMBIT_ROOT@/rt/values-utils.scm")
 (include "@RAPID_GAMBIT_ROOT@/rt/record-GPL3.scm")
