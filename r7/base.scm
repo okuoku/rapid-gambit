@@ -295,6 +295,11 @@
 
 (define (flush-output-port . ignored) 'bogus)
 
+(define (call-with-port port proc)
+  (call-with-values
+    (lambda () (proc port))
+    (lambda x (close-port port) (values x))))
+
 ;; R7RS String
 
 (define (%utf8->string u8) ;; FIXME: Detect illegal sequence more strictly
