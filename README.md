@@ -4,15 +4,15 @@ Gambit port of [rapid-scheme](https://www.rapid-scheme.org/).
 
 # Status
 
-It runs some R7RS code with Gambit interpreter; rapid-compiler compiled 
-with `gsc` successfully runs rapid-scheme frontend itself.
+It runs some R7RS programs with Gambit interpreter.
 
-Most of R7RS libraries are still missing.
+About 90 % of R7RS symbols implemented(or stubbed out).
+See [Status] page for current status.
 
 # Prerequisites
 
 - Larceny (0.99-) - Required for bootstrap rapid-scheme
-- or, chibi-scheme - Used when Larceny unavailable (slow)
+ - or, chibi-scheme - Used when Larceny unavailable (slow)
 - Gambit (4.x)
 - CMake (2.8.1x or 3.x)
 
@@ -87,3 +87,5 @@ Rapid-Gambit is combination of:
 - Glue code and support scripts including `CMakeLists.txt`:
   I hereby release it into the Public domain.
 
+
+[Status]: https://github.com/okuoku/rapid-gambit/blob/master/doc/status.md
