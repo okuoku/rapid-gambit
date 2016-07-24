@@ -67,6 +67,7 @@
 (define rapid-require "rapid-scheme/share/rapid/primitives.scm")
 (define r7-tbl "misc/impltrack/r7-symbols.scm")
 (define known-bad "misc/impltrack/known-bad.scm")
+(define known-good "misc/impltrack/known-good.scm")
 (define override "r7/_override.scm")
 
 (define (has-core? sym)
@@ -228,7 +229,27 @@
 (let ((require (map extract-rapid-require (file->sexp rapid-require)))
       (r7 (file->sexp r7-tbl))
       (bad (file->sexp known-bad))
+      (good (file->sexp known-good))
       (ovl (extract-override (file->sexp override))))
+
+  (define (mark-using-list! lis code)
+    (define (do-modify! sym comment)
+      (modify-symbol! 
+        #t sym
+        (lambda (v)
+          (let ((c (vector-ref v 1)))
+           (unless c
+             (vector-set! v 1 code)
+             (vector-set! v 4 comment))))))
+    (for-each (lambda (ent)
+                (cond
+                  ((list? ent)
+                   (let ((sym (car ent))
+                         (comment (cadr ent)))
+                     (do-modify! sym comment)))
+                  (else
+                    (do-modify! ent ""))))
+              lis) )
 
   ;; First, add R7RS library symbols
   (let loop ((rest r7))
@@ -257,9 +278,9 @@
        (loop next))))
 
   ;; Mark known-bads
-  (for-each (lambda (sym)
-              (modify-symbol! #t sym (lambda (v) (vector-set! v 1 'BAD))))
-            bad)
+  (mark-using-list! bad 'BAD)
+  (mark-using-list! good 'implemented)
+
   ;; Mark Dispatched
   (for-each (lambda (e)
               (let ((from (car e))

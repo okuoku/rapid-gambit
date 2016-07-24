@@ -6,7 +6,7 @@ Gambit port of [rapid-scheme](https://www.rapid-scheme.org/).
 
 It runs some R7RS programs with Gambit interpreter.
 
-About 90 % of R7RS symbols implemented(or stubbed out).
+About 80 % of R7RS symbols implemented(or stubbed out).
 See [Status] page for current status.
 
 # Prerequisites

@@ -1,27 +1,27 @@
 # Implementation status
 
-- R7RS Coverage % (Incl. Not confirmed): 88.4272997032641
+- R7RS Coverage % (Incl. Not confirmed): 86.35014836795251
 - Total: 337
-- Implemented procedures: 6
+- Implemented procedures: 49
 - Implemented by Rapid-Scheme: 52
-- Maybe implemented: 240
+- Maybe implemented: 190
 - Not yet implemented: 36
-- Bad: 3
+- Bad: 10
 
 # Symbol status
 |Symbol|status|library|R7RS Section|Remarks|
 |:-----|:----:|:-----:|:-----------|:------|
-|*                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|+                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|-                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
+|*                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
+|+                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
+|-                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
 |...                           |rapid-scheme    |(scheme base)           |4.3.2. Pattern language ||
 |/                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|<                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|<=                            |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|=                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
+|<                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
+|<=                            |implemented     |(scheme base)           |6.2.6. Numerical operations||
+|=                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
 |=>                            |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
-|>                             |maybe           |(scheme base)           |6.2.6. Numerical operations||
-|>=                            |maybe           |(scheme base)           |6.2.6. Numerical operations||
+|>                             |implemented     |(scheme base)           |6.2.6. Numerical operations||
+|>=                            |implemented     |(scheme base)           |6.2.6. Numerical operations||
 |_                             |rapid-scheme    |(scheme base)           |4.3.2. Pattern language ||
 |abs                           |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |and                           |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
@@ -42,17 +42,17 @@
 |bytevector-u8-ref             |maybe           |(scheme base)           |6.9. Bytevectors        ||
 |bytevector-u8-set!            |maybe           |(scheme base)           |6.9. Bytevectors        ||
 |bytevector?                   |maybe           |(scheme base)           |6.9. Bytevectors        ||
-|caar                          |maybe           |(scheme base)           |6.4. Pairs and lists    ||
-|cadr                          |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|caar                          |implemented     |(scheme base)           |6.4. Pairs and lists    ||
+|cadr                          |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |call-with-current-continuation|rapid-scheme    |(scheme base)           |6.10. Control features  ||
 |call-with-port                |maybe           |(scheme base)           |6.13.1. Ports           ||
 |call-with-values              |rapid-scheme    |(scheme base)           |6.10. Control features  ||
 |call/cc                       |maybe           |(scheme base)           |6.10. Control features  ||
-|car                           |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|car                           |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |case                          |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |cdar                          |maybe           |(scheme base)           |6.4. Pairs and lists    ||
-|cddr                          |maybe           |(scheme base)           |6.4. Pairs and lists    ||
-|cdr                           |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|cddr                          |implemented     |(scheme base)           |6.4. Pairs and lists    ||
+|cdr                           |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |ceiling                       |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |char->integer                 |maybe           |(scheme base)           |6.6. Characters         ||
 |char-ready?                   |maybe           |(scheme base)           |6.13.2. Input           ||
@@ -68,7 +68,7 @@
 |complex?                      |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |cond                          |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |cond-expand                   |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
-|cons                          |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|cons                          |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |current-error-port            |maybe           |(scheme base)           |6.13.1. Ports           ||
 |current-input-port            |maybe           |(scheme base)           |6.13.1. Ports           ||
 |current-output-port           |maybe           |(scheme base)           |6.13.1. Ports           ||
@@ -134,7 +134,7 @@
 |list-ref                      |maybe           |(scheme base)           |6.4. Pairs and lists    ||
 |list-set!                     |NOTYET          |(scheme base)           |6.4. Pairs and lists    ||
 |list-tail                     |maybe           |(scheme base)           |6.4. Pairs and lists    ||
-|list?                         |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|list?                         |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |make-bytevector               |maybe           |(scheme base)           |6.9. Bytevectors        ||
 |make-list                     |NOTYET          |(scheme base)           |6.4. Pairs and lists    ||
 |make-parameter                |rapid-scheme    |(scheme base)           |4.2.6. Dynamic bindings ||
@@ -150,7 +150,7 @@
 |negative?                     |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |newline                       |maybe           |(scheme base)           |6.13.3. Output          ||
 |not                           |maybe           |(scheme base)           |6.3. Booleans           ||
-|null?                         |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|null?                         |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |number->string                |maybe           |(scheme base)           |6.2.7. Numerical input and output||
 |number?                       |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |numerator                     |maybe           |(scheme base)           |6.2.6. Numerical operations||
@@ -162,7 +162,7 @@
 |or                            |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |output-port-open?             |NOTYET          |(scheme base)           |6.13.1. Ports           ||
 |output-port?                  |maybe           |(scheme base)           |6.13.1. Ports           ||
-|pair?                         |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|pair?                         |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |parameterize                  |rapid-scheme    |(scheme base)           |4.2.6. Dynamic bindings ||
 |peek-char                     |maybe           |(scheme base)           |6.13.2. Input           ||
 |peek-u8                       |NOTYET          |(scheme base)           |6.13.2. Input           ||
@@ -188,8 +188,8 @@
 |reverse                       |maybe           |(scheme base)           |6.4. Pairs and lists    ||
 |round                         |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |set!                          |rapid-scheme    |(scheme base)           |4.1.6. Assignments      ||
-|set-car!                      |maybe           |(scheme base)           |6.4. Pairs and lists    ||
-|set-cdr!                      |maybe           |(scheme base)           |6.4. Pairs and lists    ||
+|set-car!                      |implemented     |(scheme base)           |6.4. Pairs and lists    ||
+|set-cdr!                      |implemented     |(scheme base)           |6.4. Pairs and lists    ||
 |square                        |maybe           |(scheme base)           |6.2.6. Numerical operations||
 |string                        |maybe           |(scheme base)           |6.7. Strings            ||
 |string->list                  |maybe           |(scheme base)           |6.7. Strings            ||
@@ -257,7 +257,7 @@
 |char-ci>=?                    |maybe           |(scheme char)           |6.6. Characters         ||
 |char-ci>?                     |maybe           |(scheme char)           |6.6. Characters         ||
 |char-downcase                 |maybe           |(scheme char)           |6.6. Characters         ||
-|char-foldcase                 |maybe           |(scheme char)           |6.6. Characters         ||
+|char-foldcase                 |BAD             |(scheme char)           |6.6. Characters         |[Issue 2](https://github.com/okuoku/rapid-gambit/issues/2)|
 |char-lower-case?              |maybe           |(scheme char)           |6.6. Characters         ||
 |char-numeric?                 |maybe           |(scheme char)           |6.6. Characters         ||
 |char-upcase                   |maybe           |(scheme char)           |6.6. Characters         ||
@@ -270,7 +270,7 @@
 |string-ci>=?                  |maybe           |(scheme char)           |6.7. Strings            ||
 |string-ci>?                   |maybe           |(scheme char)           |6.7. Strings            ||
 |string-downcase               |NOTYET          |(scheme char)           |6.7. Strings            ||
-|string-foldcase               |maybe           |(scheme char)           |6.7. Strings            ||
+|string-foldcase               |BAD             |(scheme char)           |6.7. Strings            |[Issue 2](https://github.com/okuoku/rapid-gambit/issues/2)|
 |string-upcase                 |NOTYET          |(scheme char)           |6.7. Strings            ||
 |angle                         |maybe           |(scheme complex)        |6.2.6. Numerical operations||
 |magnitude                     |maybe           |(scheme complex)        |6.2.6. Numerical operations||
@@ -278,31 +278,31 @@
 |imag-part                     |maybe           |(scheme complex)        |6.2.6. Numerical operations||
 |make-polar                    |maybe           |(scheme complex)        |6.2.6. Numerical operations||
 |real-part                     |maybe           |(scheme complex)        |6.2.6. Numerical operations||
-|caaaar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caaadr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caaar                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caadar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caaddr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caadr                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cadaar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cadadr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cadar                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caddar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cadddr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|caddr                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdaaar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdaadr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdaar                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdadar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdaddr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdadr                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cddaar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cddadr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cddar                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdddar                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cddddr                        |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|cdddr                         |maybe           |(scheme cxr)            |6.4. Pairs and lists    ||
-|environment                   |maybe           |(scheme eval)           |6.12. Environments and evaluation||
+|caaaar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caaadr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caaar                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caadar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caaddr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caadr                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cadaar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cadadr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cadar                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caddar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cadddr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|caddr                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdaaar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdaadr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdaar                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdadar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdaddr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdadr                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cddaar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cddadr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cddar                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdddar                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cddddr                        |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|cdddr                         |implemented     |(scheme cxr)            |6.4. Pairs and lists    ||
+|environment                   |BAD             |(scheme eval)           |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
 |eval                          |implemented     |(scheme eval)           |6.12. Environments and evaluation|Rapid-gambit runtime override (eval:r7)|
 |call-with-input-file          |rapid-scheme    |(scheme file)           |6.13.1. Ports           ||
 |call-with-output-file         |rapid-scheme    |(scheme file)           |6.13.1. Ports           ||
@@ -331,7 +331,7 @@
 |force                         |rapid-scheme    |(scheme lazy)           |4.2.5. Delayed evaluation||
 |make-promise                  |rapid-scheme    |(scheme lazy)           |4.2.5. Delayed evaluation||
 |promise?                      |BAD             |(scheme lazy)           |4.2.5. Delayed evaluation||
-|load                          |maybe           |(scheme load)           |6.14. System interface  ||
+|load                          |BAD             |(scheme load)           |6.14. System interface  |[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
 |command-line                  |maybe           |(scheme process-context)|6.14. System interface  ||
 |emergency-exit                |maybe           |(scheme process-context)|6.14. System interface  ||
 |exit                          |implemented     |(scheme process-context)|6.14. System interface  |Rapid-gambit runtime override (exit:r7)|
@@ -345,6 +345,6 @@
 |write                         |maybe           |(scheme write)          |6.13.3. Output          ||
 |write-shared                  |maybe           |(scheme write)          |6.13.3. Output          ||
 |write-simple                  |maybe           |(scheme write)          |6.13.3. Output          ||
-|scheme-report-environment     |maybe           |Unknown                 |6.12. Environments and evaluation||
-|null-environment              |maybe           |Unknown                 |6.12. Environments and evaluation||
-|interaction-environment       |maybe           |Unknown                 |6.12. Environments and evaluation||
+|scheme-report-environment     |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
+|null-environment              |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
+|interaction-environment       |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
