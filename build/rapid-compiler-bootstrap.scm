@@ -29,7 +29,7 @@
 	(rapid args-fold)
 	(rapid version-etc)
 	(rapid syntax)
-	(rapid libraries)
+	(rapid library-definitions)
 	(rapid compiler))
 
 (define (write-filtered x port)

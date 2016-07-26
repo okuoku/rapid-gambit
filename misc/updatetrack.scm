@@ -214,6 +214,7 @@
         (proc a)
         (loop (cdr cur))))
      (cond
+       ((eq? fail? 'ignore) 'ignore)
        (fail? 
          (error "Not found" sym))
        (else
@@ -298,7 +299,7 @@
   ;; Mark Required
   (for-each (lambda (sym)
               (modify-symbol!
-                #t sym
+                'ignore sym
                 (lambda (v)
                   (let ((cur (vector-ref v 1)))
                    (unless cur

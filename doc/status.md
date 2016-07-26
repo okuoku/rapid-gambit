@@ -1,12 +1,12 @@
 # Implementation status
 
-- R7RS Coverage % (Incl. Not confirmed): 86.05341246290801
+- R7RS Coverage % (Incl. Not confirmed): 86.64688427299704
 - Total: 337
 - Implemented procedures: 48
-- Implemented by Rapid-Scheme: 52
+- Implemented by Rapid-Scheme: 54
 - Maybe implemented: 190
 - Not yet implemented: 36
-- Bad: 11
+- Bad: 9
 
 # Symbol status
 |Symbol|status|library|R7RS Section|Remarks|
@@ -18,7 +18,7 @@
 |include                       |rapid-scheme    |(scheme base)           |4.1.7. Inclusion        ||
 |include-ci                    |rapid-scheme    |(scheme base)           |4.1.7. Inclusion        ||
 |cond                          |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
-|else                          |BAD             |(scheme base)           |4.2.1. Conditionals     ||
+|else                          |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |=>                            |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |case                          |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
 |and                           |rapid-scheme    |(scheme base)           |4.2.1. Conditionals     ||
@@ -33,7 +33,7 @@
 |let-values                    |rapid-scheme    |(scheme base)           |4.2.2. Binding constructs||
 |let*-values                   |rapid-scheme    |(scheme base)           |4.2.2. Binding constructs||
 |begin                         |rapid-scheme    |(scheme base)           |4.2.3. Sequencing       ||
-|do                            |BAD             |(scheme base)           |4.2.4. Iteration        ||
+|do                            |rapid-scheme    |(scheme base)           |4.2.4. Iteration        ||
 |delay                         |rapid-scheme    |(scheme lazy)           |4.2.5. Delayed evaluation||
 |delay-force                   |rapid-scheme    |(scheme lazy)           |4.2.5. Delayed evaluation||
 |force                         |rapid-scheme    |(scheme lazy)           |4.2.5. Delayed evaluation||
