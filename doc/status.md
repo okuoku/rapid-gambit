@@ -1,9 +1,9 @@
 # Implementation status
 
-- R7RS Coverage % (Incl. Not confirmed): 86.51026392961877
-- Total: 341
+- R7RS Coverage % (Incl. Not confirmed): 86.35014836795251
+- Total: 337
 - Implemented procedures: 49
-- Implemented by Rapid-Scheme: 56
+- Implemented by Rapid-Scheme: 52
 - Maybe implemented: 190
 - Not yet implemented: 36
 - Bad: 10
@@ -219,14 +219,10 @@
 |string-ci<?                   |maybe           |(scheme char)           |6.7. Strings            ||
 |string>?                      |maybe           |(scheme base)           |6.7. Strings            ||
 |string-ci>?                   |maybe           |(scheme char)           |6.7. Strings            ||
-|string<=?                     |maybe           |Unknown                 |6.7. Strings            ||
-|string<=?                     |rapid-scheme    |(scheme base)           |6.7. Strings            ||
-|string>=?                     |maybe           |Unknown                 |6.7. Strings            ||
-|string>=?                     |rapid-scheme    |(scheme base)           |6.7. Strings            ||
-|string-ci<=?                  |maybe           |Unknown                 |6.7. Strings            ||
-|string-ci<=?                  |rapid-scheme    |(scheme char)           |6.7. Strings            ||
-|string-ci>=?                  |maybe           |Unknown                 |6.7. Strings            ||
-|string-ci>=?                  |rapid-scheme    |(scheme char)           |6.7. Strings            ||
+|string<=?                     |maybe           |(scheme base)           |6.7. Strings            ||
+|string>=?                     |maybe           |(scheme base)           |6.7. Strings            ||
+|string-ci<=?                  |maybe           |(scheme char)           |6.7. Strings            ||
+|string-ci>=?                  |maybe           |(scheme char)           |6.7. Strings            ||
 |string-upcase                 |NOTYET          |(scheme char)           |6.7. Strings            ||
 |string-downcase               |NOTYET          |(scheme char)           |6.7. Strings            ||
 |string-foldcase               |BAD             |(scheme char)           |6.7. Strings            |[Issue 2](https://github.com/okuoku/rapid-gambit/issues/2)|
