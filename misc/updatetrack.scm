@@ -251,21 +251,6 @@
                     (do-modify! ent ""))))
               lis) )
 
-  ;; First, add R7RS library symbols
-  (let loop ((rest r7))
-   (if (pair? rest)
-     (let ((a (car rest))
-           (next (cdr rest)))
-       (when (list? (car a))
-         (for-each (lambda (sym) 
-                     (set! symbols
-                       (cons 
-                         (vector sym #f (car a) #f #f)
-                         symbols)))
-                   (cdr a)))
-       (loop next))
-     (set! symbols (reverse symbols))))
-
   ;; Fill section names
   (let loop ((rest r7))
    (when (pair? rest)
@@ -273,9 +258,25 @@
            (next (cdr rest)))
        (when (string? (car a))
          (for-each (lambda (sym)
-                     (modify-symbol! #f sym (lambda (v) (vector-set! v 3 (car a)))))
+                     (set! symbols
+                       (cons 
+                         (vector sym #f "Unknown" (car a) #f)
+                         symbols)))
                    (cdr a)))
        (loop next))))
+
+  ;; Add R7RS library symbols
+  (let loop ((rest r7))
+   (if (pair? rest)
+     (let ((a (car rest))
+           (next (cdr rest)))
+       (when (list? (car a))
+         (for-each (lambda (sym) 
+                     (modify-symbol! #f sym (lambda (v) (vector-set! v 2 (car a)))))
+                   (cdr a)))
+       (loop next))
+     (set! symbols (reverse symbols))))
+
 
   ;; Mark known-bads
   (mark-using-list! bad 'BAD)
