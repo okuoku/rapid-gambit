@@ -1,12 +1,12 @@
 # Implementation status
 
-- R7RS Coverage % (Incl. Not confirmed): 86.35014836795251
+- R7RS Coverage % (Incl. Not confirmed): 86.05341246290801
 - Total: 337
-- Implemented procedures: 49
+- Implemented procedures: 48
 - Implemented by Rapid-Scheme: 52
 - Maybe implemented: 190
 - Not yet implemented: 36
-- Bad: 10
+- Bad: 11
 
 # Symbol status
 |Symbol|status|library|R7RS Section|Remarks|
@@ -284,7 +284,7 @@
 |scheme-report-environment     |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
 |null-environment              |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
 |interaction-environment       |BAD             |Unknown                 |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
-|eval                          |implemented     |(scheme eval)           |6.12. Environments and evaluation|Rapid-gambit runtime override (eval:r7)|
+|eval                          |BAD             |(scheme eval)           |6.12. Environments and evaluation|[Issue 4](https://github.com/okuoku/rapid-gambit/issues/4)|
 |call-with-port                |maybe           |(scheme base)           |6.13.1. Ports           ||
 |call-with-input-file          |rapid-scheme    |(scheme file)           |6.13.1. Ports           ||
 |call-with-output-file         |rapid-scheme    |(scheme file)           |6.13.1. Ports           ||

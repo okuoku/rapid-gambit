@@ -226,11 +226,21 @@
           (proc x)
           (set! symbols (append symbols (list x)))))))))
 
+(define (comment-override sym)
+  (let ((from (car sym))
+        (to (cadr sym)))
+    (list
+      from
+      (string-append
+        "Rapid-gambit runtime override ("
+        (symbol->string to)
+        ")"))))
+
 (let ((require (map extract-rapid-require (file->sexp rapid-require)))
       (r7 (file->sexp r7-tbl))
       (bad (file->sexp known-bad))
       (good (file->sexp known-good))
-      (ovl (extract-override (file->sexp override))))
+      (ovl (map comment-override (extract-override (file->sexp override)))))
 
   (define (mark-using-list! lis code)
     (define (do-modify! sym comment)
@@ -283,19 +293,8 @@
   (mark-using-list! good 'implemented)
 
   ;; Mark Dispatched
-  (for-each (lambda (e)
-              (let ((from (car e))
-                    (to (cadr e)))
-                (modify-symbol! 
-                  #t from
-                  (lambda (v) 
-                    (vector-set! v 1 'implemented)
-                    (vector-set! v 4 
-                                 (string-append
-                                   "Rapid-gambit runtime override ("
-                                   (symbol->string to)
-                                   ")"))))))
-            ovl)
+  (mark-using-list! ovl 'implemented)
+
   ;; Mark Required
   (for-each (lambda (sym)
               (modify-symbol!
