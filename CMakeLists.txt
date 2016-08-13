@@ -130,6 +130,7 @@ if(RAPID_GAMBIT_USE_CHIBI_SCHEME)
         -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
         -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
         -DENTRYPOINT=${rapid-gambit-bootstrap}
+        -DGEN=${CMAKE_CURRENT_BINARY_DIR}/gen
         -DMAIN=${rapid-gambit-main}
         -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
         -P ${CMAKE_CURRENT_LIST_DIR}/cmake/gen-core-scm-chibi-scheme.cmake
@@ -147,6 +148,7 @@ else()
         -DLARCENY=${RAPID_GAMBIT_LARCENY}
         -DRAPID_SCHEME=${RAPID_SCHEME_ROOT}
         -DRAPID_GAMBIT=${RAPID_GAMBIT_ROOT}
+        -DGEN=${CMAKE_CURRENT_BINARY_DIR}/gen
         -DENTRYPOINT=${rapid-gambit-bootstrap}
         -DMAIN=${rapid-gambit-main}
         -DOUT=${CMAKE_CURRENT_BINARY_DIR}/core.scm
@@ -174,6 +176,18 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/core0.scm
     ${CMAKE_CURRENT_BINARY_DIR}/gen.scm
     ${CMAKE_CURRENT_BINARY_DIR}/core.scm
     COMMENT "Expand Larceny SEXP into Gambit forms(core0.scm)")
+
+set(PACKAGE "dummy_PACKAGE")
+set(VERSION "dummy_VERSION")
+set(BUGREPORT "dummy_BUGREPORT")
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rapid-scheme/src/compiler/lib/rapid/features.scm.in
+    ${CMAKE_CURRENT_BINARY_DIR}/gen/features.scm
+    @ONLY)
+# FIXME: In-tree modification
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rapid-scheme/src/compiler/lib/rapid/features.scm.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/rapid-scheme/src/compiler/lib/rapid/features.scm
+    @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.scm.in
     ${CMAKE_CURRENT_BINARY_DIR}/config.scm
@@ -227,17 +241,18 @@ add_custom_target(rapid-gambit-executable ALL
 add_dependencies(rapid-gambit-executable genversion)
 
 # install targets
+# FIXME: Install features.scm
 install(PROGRAMS
     ${RAPID_GAMBIT}
     DESTINATION bin)
 install(DIRECTORY
-    ${RAPID_SCHEME_ROOT}/rapid
-    ${RAPID_SCHEME_ROOT}/share/rapid
-    ${RAPID_SCHEME_ROOT}/share/scheme
+    ${RAPID_SCHEME_ROOT}/src/compiler/lib/rapid
+    ${RAPID_SCHEME_ROOT}/src/runtime/lib/rapid
+    ${RAPID_SCHEME_ROOT}/src/runtime/lib/scheme
     DESTINATION ${RAPID_GAMBIT_LIBPATH})
 install(FILES
-    ${RAPID_SCHEME_ROOT}/share/rapid.sld
-    ${RAPID_SCHEME_ROOT}/share/rapid.scm
+    ${RAPID_SCHEME_ROOT}/src/runtime/lib/rapid.sld
+    ${RAPID_SCHEME_ROOT}/src/runtime/lib/rapid.scm
     DESTINATION ${RAPID_GAMBIT_LIBPATH})
 
 
@@ -283,13 +298,14 @@ enable_testing()
 function(add_testrun nam src wrkdir)
     add_test(NAME ${nam}
         COMMAND ${RAPID_GAMBIT}
-        -I ${RAPID_SCHEME_ROOT} -I ${RAPID_SCHEME_ROOT}/share
+        -I ${RAPID_SCHEME_ROOT}/src/compiler/lib
+        -I ${RAPID_SCHEME_ROOT}/src/runtime/lib
         ${src}
         WORKING_DIRECTORY ${wrkdir})
 endfunction()
 
 add_testrun(trivial ${CMAKE_CURRENT_LIST_DIR}/tests/trivial.scm
     ${CMAKE_CURRENT_BINARY_DIR})
-add_testrun(rapid-scheme-test ${RAPID_SCHEME_ROOT}/tests.scm
+add_testrun(rapid-scheme-test ${RAPID_SCHEME_ROOT}/tests/tests.scm
     ${RAPID_SCHEME_ROOT})
 

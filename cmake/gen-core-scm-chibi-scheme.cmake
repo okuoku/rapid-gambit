@@ -13,10 +13,12 @@
 set(buildline
     ${CHIBI_SCHEME}
     -h 1g
-    -I ${RAPID_SCHEME}
+    -I ${RAPID_SCHEME}/src/compiler/lib
+    -I ${GEN}
     ${ENTRYPOINT}
     -I ${RAPID_SCHEME}
-    -I ${RAPID_SCHEME}/share
+    -I ${RAPID_SCHEME}/src/compiler/lib
+    -I ${RAPID_SCHEME}/src/runtime/lib
     -I ${RAPID_GAMBIT}/lib
     -o ${OUT}
     ${MAIN}
